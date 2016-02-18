@@ -4,7 +4,6 @@ namespace App\Controllers;
 
 use App\Models\InviteCode;
 use App\Services\Auth;
-use App\Models\User;
 use App\Models\Node;
 use App\Services\Config;
 use App\Utils\Hash;
@@ -54,7 +53,7 @@ class UserController extends BaseController
             $ary['method'] = $this->user->method;
         }
         $json = json_encode($ary);
-        $ssurl =  $node->method.":".$this->user->passwd."@".$node->server.":".$this->user->port;
+        $ssurl =  $ary['method'].":".$this->user->passwd."@".$node->server.":".$this->user->port;
         $ssqr = "ss://".base64_encode($ssurl);
         if ( 64 !== strlen( $this->user->surgetoken ) ) {
             $this->user->surgetoken = Tools::genRandomChar( 64 );
@@ -99,18 +98,17 @@ class UserController extends BaseController
         $this->user->invite_num = 0;
         $this->user->save();
         $res['ret'] = 1;
-        return $response->getBody()->write(json_encode($res));
+        return $this->echoJson($response,$res);
     }
 
     public function sys(){
         return $this->view()->assign('ana',"")->display('user/sys.tpl');
-
     }
 
     public function updatePassword($request, $response, $args){
         $oldpwd =  $request->getParam('oldpwd');
-        $pwd =  $request->getParam('pwd"');
-        $repwd =  $request->getParam('repwd"');
+        $pwd =  $request->getParam('pwd');
+        $repwd =  $request->getParam('repwd');
         $user = $this->user;
         if (!Hash::checkPassword($user->pass,$oldpwd)){
             $res['ret'] = 0;
@@ -134,7 +132,7 @@ class UserController extends BaseController
 
         $res['ret'] = 1;
         $res['msg'] = "ok";
-        return $response->getBody()->write(json_encode($res));
+        return $this->echoJson($response,$res);
     }
 
     public function updateSsPwd($request, $response, $args){
@@ -142,7 +140,7 @@ class UserController extends BaseController
         $pwd =  $request->getParam('sspwd');
         $user->updateSsPwd($pwd);
         $res['ret'] = 1;
-        return $response->getBody()->write(json_encode($res));
+        return $this->echoJson($response,$res);
     }
 
     public function updateAcPwd($request, $response, $args){
@@ -169,7 +167,7 @@ class UserController extends BaseController
         $method = strtolower($method);
         $user->updateMethod($method);
         $res['ret'] = 1;
-        return $response->getBody()->write(json_encode($res));
+        return $this->echoJson($response,$res);
     }
 
     public function logout($request, $response, $args){
@@ -193,8 +191,27 @@ class UserController extends BaseController
         $this->user->save();
         $res['msg'] = sprintf("获得了本月 %u MB流量，下月 %u MB流量。", $traffic, $trafficnext);
         $res['ret'] = 1;
-        return $response->getBody()->write(json_encode($res));
+        return $this->echoJson($response,$res);
     }
 
+    public function kill($request, $response, $args){
+        return $this->view()->display('user/kill.tpl');
+    }
 
+    public function handleKill($request, $response, $args){
+        $user = Auth::getUser();
+        $passwd =  $request->getParam('passwd');
+        // check passwd
+        $res = array();
+        if (!Hash::checkPassword($user->pass,$passwd)){
+            $res['ret'] = 0;
+            $res['msg'] = " 密码错误";
+            return $this->echoJson($response,$res);
+        }
+        Auth::logout();
+        $user->delete();
+        $res['ret'] = 1;
+        $res['msg'] = "GG!您的帐号已经从我们的系统中删除.";
+        return $this->echoJson($response,$res);
+    }
 }
