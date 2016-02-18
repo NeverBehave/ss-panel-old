@@ -122,7 +122,24 @@ class AuthController extends BaseController
         $user->t = 0;
         $user->u = 0;
         $user->d = 0;
-        $user->transfer_enable = Tools::toGB(Config::get('defaultTraffic'));
+        $groups = array( 1, 2, 3, 4, 5 );
+        foreach ( $groups as $group ) {
+            $prefix = Config::get( "g{$group}CodePrefix" );
+            if ( !empty( $prefix ) && 0 === strpos( $code, Config::get( "g{$group}CodePrefix" ) ) ) {
+                $user->user_type = $group;
+                break;
+            }
+        }
+        if ( !$user->user_type ) $user->user_type = Config::get( "defaultGroup" );
+        $user->transfer_enable = Tools::toGB(Config::get("g{$user->user_type}DefaultTraffic"));
+        $user->transfer_enable_next = Tools::toGB(Config::get("g{$user->user_type}DefaultNextTraffic"));
+/*
+        if ( 0 === strpos( $code, Config::get( "vipCodePrefix" ) ) ) {
+            $user->transfer_enable = Tools::toGB(Config::get('defaultVipTraffic'));
+        } else {
+            $user->transfer_enable = Tools::toGB(Config::get('defaultTraffic'));
+        }
+*/
         $user->invite_num = Config::get('inviteNum');
         $user->ref_by = $c->user_id;
 

@@ -1,0 +1,57 @@
+code {
+	white-space: pre-wrap;       /* css-3 */
+	white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+	white-space: -pre-wrap;      /* Opera 4-6 */
+	white-space: -o-pre-wrap;    /* Opera 7 */
+	word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}
+
+.contact-list {
+	list-style-type: none;
+	margin-left: -20px;
+}
+
+.contact-list li {
+	margin-top: 5px;
+}
+
+.contact-list img {
+	width: 50px;
+}
+
+.contact-list .caption {
+	margin-left: 10px;
+}
+
+.login-page, .register-page {
+	background: #3f51b5;
+}
+
+.login-logo a, .register-logo a {
+	color: #fff;
+}
+
+.login-box-body, .register-box-body {
+	border-radius: 5px;
+}
+
+.navbar {
+	background-color: #283593 !important;
+}
+
+.logo {
+	background-color: #1a237e !important;
+	height: 53px !important;
+}
+
+.wrapper {
+	background-color: #3f51b5 !important;
+}
+
+.main-sidebar {
+	display: fixed;
+	background-color: #3f51b5 !important;
+	box-shadow: 0 0 10px 1px #3f51b5 !important;
+}
+
+

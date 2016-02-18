@@ -18,7 +18,7 @@
                 <div class="box box-solid">
                     <div class="box-header">
                         <i class="fa fa-th-list"></i>
-                        <h3 class="box-title">节点</h3>
+                        <h3 class="box-title">{if $user->ac_enable}Shadowsocks {/if}节点</h3>
                     </div><!-- /.box-header -->
                     <div class="box-body">
                         <div class="callout callout-warning">
@@ -54,6 +54,38 @@
 
 
                 </div><!-- /.box -->
+                {if $user->ac_enable}
+                <div class="box box-solid">
+                    <div class="box-header">
+                        <i class="fa fa-th-list"></i>
+                        <h3 class="box-title">AnyConnect 节点</h3>
+                    </div><!-- /.box-header -->
+                    <div class="box-body">
+                        <div class="callout callout-warning">
+                            <h4>注意!</h4>
+                            <p>请勿在任何地方公开节点地址！</p>
+                        </div>
+                        {foreach $acnodes as $node}
+                        <div class="nav-tabs-custom">
+                            <ul class="nav nav-tabs pull-right">
+                                <li class="pull-left header"><i class="fa fa-angle-right"></i> {$node->name}</li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="tab_1-1">
+                                    <p> <a class="btn btn-xs bg-purple btn-flat margin" href="#">地址:</a> <code>{$node->server}</code>
+                                        <a class="btn btn-xs bg-orange btn-flat margin" href="#">{$node->status}</a>
+                                    </p>
+                                    <p> {$node->info}</p>
+                                </div><!-- /.tab-pane -->
+                            </div><!-- /.tab-content -->
+                        </div><!-- nav-tabs-custom -->
+                        {/foreach}
+                    </div><!-- /.box-body -->
+
+
+                </div><!-- /.box -->
+                {/if}
+
             </div><!-- /.col (left) -->
 
             <div class="col-md-4">

@@ -52,6 +52,11 @@ class User extends Model
         $this->save();
     }
 
+    public function updateAcPwd($pwd){
+        $this->ac_passwd = $pwd;
+        $this->save();
+    }
+
     public function updateMethod($method){
         $this->method = $method;
         $this->save();
@@ -97,6 +102,36 @@ class User extends Model
         $enable = $this->attributes['transfer_enable'];
         return Tools::flowAutoShow($enable-$total);
     }
+
+    public function nextMonthTraffic() {
+        $next = $this->attributes['transfer_enable_next'];
+        return Tools::flowAutoShow($next);
+    }
+
+    public function showUserType() {
+        switch ( $this->attributes['user_type'] ) {
+            case 1:
+            case 2:
+            default:
+                return "User";
+            case 3:
+            case 4:
+                return "VIP";
+            case 5:
+                return "Donator";
+        }
+    }
+
+    public function getCheckinMax() {
+        $group = !empty( $this->attributes['user_type'] ) ? $this->attributes['user_type'] : Config::get( "defaultGroup" );
+        return Config::get( "g{$group}CheckinMax" );
+    }
+
+    public function getCheckinMin() {
+        $group = !empty( $this->attributes['user_type'] ) ? $this->attributes['user_type'] : Config::get( "defaultGroup" );
+        return Config::get( "g{$group}CheckinMin" );
+    }
+
 
     public function isAbleToCheckin(){
         $last = $this->attributes['last_check_in_time'];

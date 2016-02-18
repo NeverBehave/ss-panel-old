@@ -5,7 +5,8 @@
     <title>{$config["appName"]}</title>
     <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
     <!-- Bootstrap 3.3.2 -->
-    <link href="/assets/public/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <!--<link href="/assets/public/css/bootstrap.min.css" rel="stylesheet" type="text/css" />-->
+    <link href="/assets/public/css/bootstrap.material.min.css" rel="stylesheet" type="text/css" />
     <!-- Font Awesome Icons -->
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
     <!-- Ionicons -->
@@ -15,6 +16,7 @@
     <!-- AdminLTE Skins. Choose a skin from the css/skins
          folder instead of downloading all of them to reduce the load. -->
     <link href="/assets/public/css/skins/_all-skins.min.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/public/css/ssworld.css" rel="stylesheet" type="text/css" />
 
     <!-- jQuery 2.1.3 -->
     <script src="/assets/public/js/jquery.min.js"></script>
@@ -25,13 +27,15 @@
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
     <![endif]-->
+    <meta name="theme-color" content="#283593"/>
+    <link rel="shortcut icon" href="/logo.png"/>
 </head>
 <body class="skin-blue">
 <!-- Site wrapper -->
 <div class="wrapper">
 
     <header class="main-header">
-        <a href="/user" class="logo">{$config["appName"]}</a>
+        <a href="/" class="logo">{$config["appName"]}</a>
         <!-- Header Navbar: style can be found in header.less -->
         <nav class="navbar navbar-static-top" role="navigation">
             <!-- Sidebar toggle button-->
@@ -87,7 +91,7 @@
                 <div class="pull-left info">
                     <p>{$user->name}</p>
 
-                    <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+                    <a href="#"><i class="fa fa-circle text-success"></i> {$user->showUserType()}</a>
                 </div>
             </div>
 

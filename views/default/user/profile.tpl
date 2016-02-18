@@ -18,6 +18,8 @@
                     <div class="box-body">
                         <p>用户名：{$user->user_name}</p>
                         <p>邮箱：{$user->email}</p>
+                        <p>用户类型：{$user->showUserType()}</p>
+                        <p>AnyConnect：{$acstatus}</p>
                         <p><a class="btn btn-danger btn-sm" href="kill">删除我的账户</a></p>
                     </div><!-- /.box -->
                 </div>

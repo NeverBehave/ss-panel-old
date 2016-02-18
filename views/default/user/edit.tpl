@@ -91,6 +91,37 @@
 
                         </div><!-- /.box-body -->
                     </div><!-- /.box -->
+                    {if $user->ac_enable}
+                    <div class="box box-solid">
+                        <div class="box-header">
+                            <i class="fa fa-align-left"></i>
+                            <h3 class="box-title">AnyConnect 连接密码修改</h3>
+                        </div><!-- /.box-header -->
+                        <div class="box-body">
+
+                            <div id="ac-msg-success" class="alert alert-info alert-dismissable" style="display:none" >
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                <h4><i class="icon fa fa-info"></i> 修改成功!</h4>
+                                <p id="ac-msg-success-p"></p>
+                            </div>
+
+                            <div id="ac-msg-error" class="alert alert-warning alert-dismissable" style="display:none">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                <h4><i class="icon fa fa-warning"></i> 出错了!</h4>
+                                <p id="ac-msg-error-p"></p>
+                            </div>
+
+
+                            <div class="form-group">
+                                <input type="text" id="acpwd" placeholder="输入新密码" class="form-control"  >
+                            </div>
+
+                            <div class="box-footer">
+                                <button type="submit" id="ac-pwd-update" class="btn btn-primary"  >修改 </button>
+                            </div>
+                        </div><!-- /.box-body -->
+                    </div><!-- /.box -->
+                    {/if}
                 </div><!-- /.col (right) -->
 
             </div>
@@ -151,6 +182,33 @@
                         }else{
                             $("#ss-msg-error").show();
                             $("#ss-msg-error-p").html(data.msg);
+                        }
+                    },
+                    error:function(jqXHR){
+                        alert("发生错误："+jqXHR.status);
+                    }
+                })
+            })
+        })
+    </script>
+
+    <script>
+        $(document).ready(function(){
+            $("#ac-pwd-update").click(function(){
+                $.ajax({
+                    type:"POST",
+                    url:"acpwd",
+                    dataType:"json",
+                    data:{
+                        acpwd: $("#acpwd").val()
+                    },
+                    success:function(data){
+                        if(data.ret){
+                            $("#ac-msg-success").show();
+                            $("#ac-msg-success-p").html(data.msg);
+                        }else{
+                            $("#ac-msg-error").show();
+                            $("#ac-msg-error-p").html(data.msg);
                         }
                     },
                     error:function(jqXHR){

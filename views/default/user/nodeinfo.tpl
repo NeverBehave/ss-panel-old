@@ -28,7 +28,24 @@
                     </code>
                     </div><!-- /.box-body -->
                 </div><!-- /.box -->
+                <div class="box box-solid">
+                    <div class="box-header">
+                        <i class="fa fa-code"></i>
+                        <h3 class="box-title">Surge</h3>
+                    </div><!-- /.box-header -->
+                    <div class="box-body">
+                        <code>
+                            {$surgeurl}
+                        </code>
+<!--
+                        <pre>
+{$surgeraw}
+                        </pre>
+-->
+                    </div><!-- /.box-body -->
+                </div><!-- /.box -->
             </div><!-- /.col (right) -->
+
 
             <div class="col-md-6">
                 <div class="box box-solid">
@@ -43,11 +60,21 @@
                         </div>
                     </div><!-- /.box-body -->
                 </div><!-- /.box -->
+                <div class="box box-solid">
+                    <div class="box-header">
+                        <i class="fa fa-code"></i>
+                        <h3 class="box-title">Command line</h3>
+                    </div><!-- /.box-header -->
+                    <div class="box-body">
+                        <code>{$sscmd}</code>
+                    </div><!-- /.box-body -->
+                </div><!-- /.box -->
+
             </div><!-- /.col (right) -->
 
             <script src=" /assets/public/js/jquery.qrcode.min.js "></script>
             <script>
-                jQuery('#qrcode').qrcode("{$ssqr}");
+                jQuery('#qrcode').qrcode({ "text" : "{$ssqr}" });
             </script>
 
         </div><!-- /.row -->

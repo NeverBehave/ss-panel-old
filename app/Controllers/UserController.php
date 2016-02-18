@@ -30,7 +30,11 @@ class UserController extends BaseController
     }
 
     public function node(){
-        $nodes = Node::where('type',1)->orderBy('sort')->get();
+        $nodes = Node::whereRaw('type = 1 or type = 3')->orderBy('sort')->get();
+        if ($this->user->ac_enable){
+            $acnodes = Node::whereRaw('type = 2 or type = 3')->orderBy('sort')->get();
+            return $this->view()->assign('nodes',$nodes)->assign('acnodes',$acnodes)->display('user/node.tpl');
+        }
         return $this->view()->assign('nodes',$nodes)->display('user/node.tpl');
     }
 
@@ -52,11 +56,20 @@ class UserController extends BaseController
         $json = json_encode($ary);
         $ssurl =  $node->method.":".$this->user->passwd."@".$node->server.":".$this->user->port;
         $ssqr = "ss://".base64_encode($ssurl);
-        return $this->view()->assign('json',$json)->assign('ssqr',$ssqr)->display('user/nodeinfo.tpl');
+        if ( 64 !== strlen( $this->user->surgetoken ) ) {
+            $this->user->surgetoken = Tools::genRandomChar( 64 );
+            $this->user->save();
+        }
+        $surgeurl = "https://ssworld.ga/surge.php?uid={$this->user->id}&node={$node->id}&token={$this->user->surgetoken}";
+        $surgeraw = Tools::getSurgeConf( $node->server, $this->user->port, $node->method, $this->user->passwd, Config::get( "surgeSSModule" ) );
+        $sscmd = "ss-local -s {$node->server} -p {$this->user->port} -l 1080 -m {$node->method} -k '{$this->user->passwd}'";
+        return $this->view()->assign('json',$json)->assign('ssqr',$ssqr)->assign('surgeraw',$surgeraw)->assign('sscmd',$sscmd)->assign('surgeurl', $surgeurl)->display('user/nodeinfo.tpl');
     }
 
     public function profile(){
-        return $this->view()->display('user/profile.tpl');
+        if ($this->user->ac_enable) $acstatus = "已开通";
+        else $acstatus = "未开通";
+        return $this->view()->assign('acstatus',$acstatus)->display('user/profile.tpl');
     }
 
     public function edit(){
@@ -132,6 +145,24 @@ class UserController extends BaseController
         return $response->getBody()->write(json_encode($res));
     }
 
+    public function updateAcPwd($request, $response, $args){
+        $user = Auth::getUser();
+        if ($user->ac_enable){
+            $pwd = $request->getParam('acpwd');
+            if(strlen($pwd) < 8){
+                $res['ret'] = 0;
+                $res['msg'] = "密码太短啦";
+            }else{
+                $user->updateAcPwd($pwd);
+                $res['ret'] = 1;
+            }
+        }else{
+            $res['ret'] = 0;
+        }
+        return $response->getBody()->write(json_encode($res));
+    }
+
+
     public function updateMethod($request, $response, $args){
         $user = Auth::getUser();
         $method =  $request->getParam('method');
@@ -153,11 +184,14 @@ class UserController extends BaseController
             $res['ret'] = 1;
             return $response->getBody()->write(json_encode($res));
         }
-        $traffic = rand(Config::get('checkinMin'),Config::get('checkinMax'));
+        // $traffic = rand(Config::get('checkinMin'),Config::get('checkinMax'));
+        $traffic = rand( $this->user->getCheckinMin(), $this->user->getCheckinMax() );
+        $trafficnext = rand( $this->user->getCheckinMin(), $this->user->getCheckinMax() ) / 2;
         $this->user->transfer_enable = $this->user->transfer_enable+ Tools::toMB($traffic);
+        $this->user->transfer_enable_next = $this->user->transfer_enable_next+ Tools::toMB($trafficnext);
         $this->user->last_check_in_time = time();
         $this->user->save();
-        $res['msg'] = sprintf("获得了 %u MB流量.",$traffic);
+        $res['msg'] = sprintf("获得了本月 %u MB流量，下月 %u MB流量。", $traffic, $trafficnext);
         $res['ret'] = 1;
         return $response->getBody()->write(json_encode($res));
     }

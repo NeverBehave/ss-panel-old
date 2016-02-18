@@ -48,7 +48,7 @@
 
                             <div class="form-group">
                                 <label for="type">是否显示</label>
-                                <input   class="form-control" id="type"  value="" placeholder="0隐藏/1显示" >
+                                <input   class="form-control" id="type"  value="" placeholder="0隐藏/1SS/2AC/3SS+AC" >
                             </div>
 
                             <div class="form-group">
@@ -60,6 +60,7 @@
                                 <label for="sort">排序</label>
                                 <input   class="form-control" id="sort"  value="" >
                             </div>
+
                         </div><!-- /.box-body -->
 
                         <div id="msg-success" class="alert alert-info alert-dismissable" style="display: none;">
