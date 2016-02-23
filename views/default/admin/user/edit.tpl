@@ -70,6 +70,11 @@
                             </div>
 
                             <div class="form-group">
+                                <label for="ac_enable">是否开通 AnyConnect</label>
+                                <input class="form-control" id="ac_enable" value="{$user->ac_enable}" placeholder="1-是 0-否" >
+                            </div>
+
+                            <div class="form-group">
                                 <label for="ref_by">邀请人ID</label>
                                 <input class="form-control" id="ref_by" value="{$user->ref_by}">
                             </div>
@@ -113,6 +118,7 @@
                     method: $("#method").val(),
                     enable: $("#enable").val(),
                     is_admin: $("#is_admin").val(),
+                    ac_enable: $("#ac_enable").val(),
                     ref_by: $("#ref_by").val()
                 },
                 success:function(data){

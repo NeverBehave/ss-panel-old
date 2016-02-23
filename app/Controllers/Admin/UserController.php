@@ -5,6 +5,7 @@ namespace App\Controllers\Admin;
 use App\Models\User;
 use App\Controllers\BaseController;
 use App\Utils\Hash;
+use App\Utils\Tools;
 
 class UserController extends BaseController
 {
@@ -43,6 +44,28 @@ class UserController extends BaseController
         $user->enable = $request->getParam('enable');
         $user->is_admin = $request->getParam('is_admin');
         $user->ref_by = $request->getParam('ref_by');
+        $acmod = false;
+        switch($request->getParam('ac_enable')){
+            case "1":
+                if($user->ac_enable) continue;
+                $acname = Tools::genRandomChar(16);
+                while(User::where("ac_user_name","=",$acname)->count())
+                    $acname = Tools::genRandomChar(16);
+                $acpasswd = Tools::genRandomChar(16);
+                $user->ac_enable = 1;
+                $user->ac_user_name = $acname;
+                $user->ac_passwd = $acpasswd;
+                $acmod = true;
+                break;
+            case "0":
+                if($user->ac_enable){
+                    $user->ac_enable = 0;
+                    $user->ac_user_name = '';
+                    $user->ac_passwd = '';
+                    $acmod = true;
+                }
+                break;
+        }
         if(!$user->save()){
             $rs['ret'] = 0;
             $rs['msg'] = "修改失败";
@@ -50,6 +73,7 @@ class UserController extends BaseController
         }
         $rs['ret'] = 1;
         $rs['msg'] = "修改成功";
+        if($acmod) $rs['msg'].="，AnyConnect 已改变";
         return $response->getBody()->write(json_encode($rs));
     }
 
