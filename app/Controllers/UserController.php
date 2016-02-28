@@ -66,8 +66,7 @@ class UserController extends BaseController
     }
 
     public function profile(){
-        if ($this->user->ac_enable) $acstatus = "已开通";
-        else $acstatus = "未开通";
+        $acstatus = $this->user->ac_enable ? "已开通" : "未开通";
         return $this->view()->assign('acstatus',$acstatus)->display('user/profile.tpl');
     }
 
