@@ -21,6 +21,9 @@
                         <p>用户类型：{$user->showUserType()}</p>
                         <p>AnyConnect：{$acstatus}</p>
                         <p>Telegram：{$telestatus}</p>
+                        {if $teletoken}
+                        <p>Telegram 绑定码：<code>{$teletoken}</code></p>
+                        {/if}
                         <p><a class="btn btn-danger btn-sm" href="kill">删除我的账户</a></p>
                     </div><!-- /.box -->
                 </div>
