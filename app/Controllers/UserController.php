@@ -72,10 +72,11 @@ class UserController extends BaseController
             $teletoken = Tools::genRandomChar(32);
 	    $this->user->telegram_token = $teletoken;
             $this->user->save();
+            $telelink = "https://telegram.me/" . Config::get( "telegramBot" ) . "?start=$teletoken";
         }else{
-            $teletoken = "";
+            $telelink = "";
         }
-        return $this->view()->assign('acstatus',$acstatus)->assign('telestatus',$telestatus)->assign('teletoken',$teletoken)->display('user/profile.tpl');
+        return $this->view()->assign('acstatus',$acstatus)->assign('telestatus',$telestatus)->assign('telelink',$telelink)->display('user/profile.tpl');
     }
 
     public function edit(){

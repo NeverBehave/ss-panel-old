@@ -20,10 +20,11 @@
                         <p>邮箱：{$user->email}</p>
                         <p>用户类型：{$user->showUserType()}</p>
                         <p>AnyConnect：{$acstatus}</p>
-                        <p>Telegram：{$telestatus}</p>
-                        {if $teletoken}
-                        <p>Telegram 绑定码：<code>{$teletoken}</code></p>
+                        <p>Telegram：{$telestatus}
+                        {if $telelink}
+                        <a href="{$telelink}">现在绑定</a>
                         {/if}
+                        </p>
                         <p><a class="btn btn-danger btn-sm" href="kill">删除我的账户</a></p>
                     </div><!-- /.box -->
                 </div>
