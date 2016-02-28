@@ -67,7 +67,8 @@ class UserController extends BaseController
 
     public function profile(){
         $acstatus = $this->user->ac_enable ? "已开通" : "未开通";
-        return $this->view()->assign('acstatus',$acstatus)->display('user/profile.tpl');
+        $telestatus = $this->user->telegram_id ? "已绑定" : "未绑定";
+        return $this->view()->assign('acstatus',$acstatus)->assign('telestatus',$telestatus)->display('user/profile.tpl');
     }
 
     public function edit(){
