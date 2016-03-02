@@ -25,7 +25,8 @@ class UserController extends BaseController
 
     public function index()
     {
-        return $this->view()->display('user/index.tpl');
+        $notice = file_get_contents( BASE_PATH . "/" . Config::get( "noticeFile" ) );
+        return $this->view()->assign('notice', $notice)->display('user/index.tpl');
     }
 
     public function node(){

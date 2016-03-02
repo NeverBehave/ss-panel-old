@@ -20,26 +20,7 @@
                         <h3 class="box-title">公告</h3>
                     </div><!-- /.box-header -->
                     <div class="box-body">
-                        <p>本站为更自由的互联网而设。</p>
-                        <p>目前我们为 Android、Linux、Windows、iOS 平台提供 Shadowsocks 服务（iOS 提供 Surge 配置文件），未来会推出 AnyConnect 服务以及 APNP 代理。</p>
-                        <p>本站试运营阶段，欢迎测试，流量可通过签到获取。</p>
-                        <div class="container-fluid" style="padding: 0;">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <h4>Telegram</h4>
-                                    <ul class="contact-list">
-                                        <li><a href="https://telegram.me/joinchat/BT1VETxgj8mgyak2bKQTzA"><img src="/assets/public/img/group-circle.png"/><span class="caption">群组</span></a></li>
-                                        <li><a href="https://telegram.me/SSWorldOfficialChannel"><img src="/assets/public/img/channel-circle.png"/><span class="caption">广播频道</span></a></li>
-                                    </ul>
-                                </div>
-                                <div class="col-md-6">
-                                    <h4>Google+</h4>
-                                    <ul class="contact-list">
-                                        <li><a href="https://plus.google.com/communities/114240734505889909332"><img src="/assets/public/img/gplus-circle.png"/><span class="caption">社区</span></a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
+                        {$notice}
                     </div><!-- /.box-body -->
                 </div><!-- /.box -->
             </div><!-- /.col (right) -->
