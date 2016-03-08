@@ -109,6 +109,16 @@
                     </a>
                 </li>
 
+                <li>
+                    <a herf="/knowledge">
+                        <i class="fa fa-sitemap"></i> <span>教程交流</span>
+                </li>
+
+                <li>
+                    <a herf="/resource">
+                        <i class="fa fa-sitemap"></i> <span>资源下载</span>
+                </li>
+
                 <li >
                     <a href="/user/profile">
                         <i class="fa fa-user"></i> <span>我的信息</span>
