@@ -110,13 +110,11 @@
                 </li>
 
                 <li>
-                    <a herf="/knowledge">
-                        <i class="fa fa-sitemap"></i> <span>教程交流</span>
+                    <a herf="/knowledge">使用教程</a>
                 </li>
 
                 <li>
-                    <a herf="/resource">
-                        <i class="fa fa-sitemap"></i> <span>资源下载</span>
+                    <a herf="/resource">资源下载</a>
                 </li>
 
                 <li >
@@ -140,7 +138,7 @@
 
                 {if $user->isAdmin()}
 
-                <li  >
+                <li>
                     <a href="/admin">
                         <i class="fa fa-cog"></i> <span>管理面板</span>
                     </a>
