@@ -4,63 +4,79 @@ namespace App\Controllers;
 
 use App\Models\InviteCode;
 use App\Services\Auth;
-use App\Models\Node;
-use App\Services\Config;
-use App\Utils\Hash;
-use App\Utils\Tools;
+use App\Models\Node, App\Models\TrafficLog, App\Models\CheckInLog;
+use App\Services\Config,App\Services\DbConfig;
+use App\Utils\Hash, App\Utils\Tools;
 
 
 /**
  *  HomeController
  */
-
 class UserController extends BaseController
 {
 
     private $user;
 
-    public function __construct(){
+    public function __construct()
+    {
         $this->user = Auth::getUser();
     }
-
-    public function index()
+    
+    public function view()
     {
-        $notice = file_get_contents( BASE_PATH . "/" . Config::get( "noticeFile" ) );
-        return $this->view()->assign('notice', $notice)->display('user/index.tpl');
+        $userFooter = DbConfig::get('user-footer');
+        return parent::view()->assign('userFooter',$userFooter); 
+    }
+
+    public function index($request, $response, $args)
+    {
+        $msg = DbConfig::get('user-index');
+        if($msg == null ){
+            $msg = "在后台修改用户中心公告...";
+        }
+        return $this->view()->assign('msg',$msg)->display('user/index.tpl');
     }
 
     public function node(){
+        $msg = DbConfig::get('user-node');
         $nodes = Node::whereRaw('type = 1 or type = 3')->orderBy('sort')->get();
         if ($this->user->ac_enable){
             $acnodes = Node::whereRaw('type = 2 or type = 3')->orderBy('sort')->get();
-            return $this->view()->assign('nodes',$nodes)->assign('acnodes',$acnodes)->display('user/node.tpl');
+            return $this->view()->assign('nodes',$nodes)->assign('acnodes',$acnodes)->assign('msg',$msg)->display('user/node.tpl');
         }
-        return $this->view()->assign('nodes',$nodes)->display('user/node.tpl');
+        return $this->view()->assign('nodes',$nodes)->assign('msg', $msg)->display('user/node.tpl');
     }
 
 
-    public function nodeInfo($request, $response, $args){
+    public function nodeInfo($request, $response, $args)
+    {
         $id = $args['id'];
         $node = Node::find($id);
 
-        if ($node == null){
+        if ($node == null) {
 
         }
         $ary['server'] = $node->server;
         $ary['server_port'] = $this->user->port;
         $ary['password'] = $this->user->passwd;
         $ary['method'] = $node->method;
-        if($node->custom_method){
+        if ($node->custom_method) {
             $ary['method'] = $this->user->method;
         }
         $json = json_encode($ary);
-        $ssurl =  $ary['method'].":".$this->user->passwd."@".$node->server.":".$this->user->port;
-        $ssqr = "ss://".base64_encode($ssurl);
-        $sscmd = "ss-local -s {$node->server} -p {$this->user->port} -l 1080 -m {$node->method} -k '{$this->user->passwd}'";
-        return $this->view()->assign('json',$json)->assign('ssqr',$ssqr)->assign('sscmd',$sscmd)->display('user/nodeinfo.tpl');
+        $json_show = json_encode($ary, JSON_PRETTY_PRINT);
+        $ssurl = $ary['method'] . ":" . $ary['password'] . "@" . $ary['server'] . ":" . $ary['server_port'];
+        $ssqr = "ss://" . base64_encode($ssurl);
+
+        $surge_base = Config::get('baseUrl') . "/downloads/ProxyBase.conf";
+        $surge_proxy = "#!PROXY-OVERRIDE:ProxyBase.conf\n";
+        $surge_proxy .= "[Proxy]\n";
+        $surge_proxy .= "Proxy = custom," . $ary['server'] . "," . $ary['server_port'] . "," . $ary['method'] . "," . $ary['password'] . "," . Config::get('baseUrl') . "/downloads/SSEncrypt.module";
+        return $this->view()->assign('json', $json)->assign('json_show', $json_show)->assign('ssqr', $ssqr)->assign('surge_base', $surge_base)->assign('surge_proxy', $surge_proxy)->display('user/nodeinfo.tpl');
     }
 
-    public function profile(){
+    public function profile($request, $response, $args)
+    {
         $acstatus = $this->user->ac_enable ? "已开通" : "未开通";
         $telestatus = $this->user->telegram_id ? "已绑定" : "未绑定";
         if (!$this->user->telegram_id){
@@ -74,24 +90,26 @@ class UserController extends BaseController
         return $this->view()->assign('acstatus',$acstatus)->assign('telestatus',$telestatus)->assign('telelink',$telelink)->display('user/profile.tpl');
     }
 
-    public function edit(){
+    public function edit($request, $response, $args)
+    {
         return $this->view()->display('user/edit.tpl');
     }
 
 
-
-    public function invite(){
+    public function invite($request, $response, $args)
+    {
         $codes = $this->user->inviteCodes();
-        return $this->view()->assign('codes',$codes)->display('user/invite.tpl');
+        return $this->view()->assign('codes', $codes)->display('user/invite.tpl');
     }
 
-    public function doInvite($request, $response, $args){
+    public function doInvite($request, $response, $args)
+    {
         $n = $this->user->invite_num;
-        if ($n < 1){
+        if ($n < 1) {
             $res['ret'] = 0;
             return $response->getBody()->write(json_encode($res));
         }
-        for ($i = 0; $i < $n; $i++ ){
+        for ($i = 0; $i < $n; $i++) {
             $char = Tools::genRandomChar(32);
             $code = new InviteCode();
             $code->code = $char;
@@ -101,30 +119,32 @@ class UserController extends BaseController
         $this->user->invite_num = 0;
         $this->user->save();
         $res['ret'] = 1;
-        return $this->echoJson($response,$res);
+        return $this->echoJson($response, $res);
     }
 
-    public function sys(){
-        return $this->view()->assign('ana',"")->display('user/sys.tpl');
+    public function sys($request, $response, $args)
+    {
+        return $this->view()->assign('ana', "")->display('user/sys.tpl');
     }
 
-    public function updatePassword($request, $response, $args){
-        $oldpwd =  $request->getParam('oldpwd');
-        $pwd =  $request->getParam('pwd');
-        $repwd =  $request->getParam('repwd');
+    public function updatePassword($request, $response, $args)
+    {
+        $oldpwd = $request->getParam('oldpwd');
+        $pwd = $request->getParam('pwd');
+        $repwd = $request->getParam('repwd');
         $user = $this->user;
-        if (!Hash::checkPassword($user->pass,$oldpwd)){
+        if (!Hash::checkPassword($user->pass, $oldpwd)) {
             $res['ret'] = 0;
             $res['msg'] = "旧密码错误";
             return $response->getBody()->write(json_encode($res));
         }
-        if($pwd != $repwd){
+        if ($pwd != $repwd) {
             $res['ret'] = 0;
             $res['msg'] = "两次输入不符合";
             return $response->getBody()->write(json_encode($res));
         }
 
-        if(strlen($pwd) < 8){
+        if (strlen($pwd) < 8) {
             $res['ret'] = 0;
             $res['msg'] = "密码太短啦";
             return $response->getBody()->write(json_encode($res));
@@ -135,15 +155,16 @@ class UserController extends BaseController
 
         $res['ret'] = 1;
         $res['msg'] = "ok";
-        return $this->echoJson($response,$res);
+        return $this->echoJson($response, $res);
     }
 
-    public function updateSsPwd($request, $response, $args){
+    public function updateSsPwd($request, $response, $args)
+    {
         $user = Auth::getUser();
-        $pwd =  $request->getParam('sspwd');
+        $pwd = $request->getParam('sspwd');
         $user->updateSsPwd($pwd);
         $res['ret'] = 1;
-        return $this->echoJson($response,$res);
+        return $this->echoJson($response, $res);
     }
 
     public function updateAcPwd($request, $response, $args){
@@ -164,23 +185,26 @@ class UserController extends BaseController
     }
 
 
-    public function updateMethod($request, $response, $args){
+    public function updateMethod($request, $response, $args)
+    {
         $user = Auth::getUser();
-        $method =  $request->getParam('method');
+        $method = $request->getParam('method');
         $method = strtolower($method);
         $user->updateMethod($method);
         $res['ret'] = 1;
-        return $this->echoJson($response,$res);
+        return $this->echoJson($response, $res);
     }
 
-    public function logout($request, $response, $args){
+    public function logout($request, $response, $args)
+    {
         Auth::logout();
         $newResponse = $response->withStatus(302)->withHeader('Location', '/auth/login');
         return $newResponse;
     }
 
-    public function doCheckIn($request, $response, $args){
-        if(!$this->user->isAbleToCheckin()){
+    public function doCheckIn($request, $response, $args)
+    {
+        if (!$this->user->isAbleToCheckin()) {
             $res['msg'] = "您似乎已经签到过了...";
             $res['ret'] = 1;
             return $response->getBody()->write(json_encode($res));
@@ -188,33 +212,46 @@ class UserController extends BaseController
         // $traffic = rand(Config::get('checkinMin'),Config::get('checkinMax'));
         $traffic = rand( $this->user->getCheckinMin(), $this->user->getCheckinMax() );
         $trafficnext = rand( $this->user->getCheckinMin(), $this->user->getCheckinMax() ) / 2;
-        $this->user->transfer_enable = $this->user->transfer_enable+ Tools::toMB($traffic);
-        $this->user->transfer_enable_next = $this->user->transfer_enable_next+ Tools::toMB($trafficnext);
+        $this->user->transfer_enable = $this->user->transfer_enable + Tools::toMB($traffic);
+        $this->user->transfer_enable_next = $this->user->transfer_enable_next + Tools::toMB($trafficnext);
         $this->user->last_check_in_time = time();
         $this->user->save();
         $res['msg'] = sprintf("获得了本月 %u MB流量，下月 %u MB流量。", $traffic, $trafficnext);
         $res['ret'] = 1;
-        return $this->echoJson($response,$res);
+        return $this->echoJson($response, $res);
     }
 
-    public function kill($request, $response, $args){
+    public function kill($request, $response, $args)
+    {
         return $this->view()->display('user/kill.tpl');
     }
 
-    public function handleKill($request, $response, $args){
+    public function handleKill($request, $response, $args)
+    {
         $user = Auth::getUser();
-        $passwd =  $request->getParam('passwd');
+        $passwd = $request->getParam('passwd');
         // check passwd
         $res = array();
-        if (!Hash::checkPassword($user->pass,$passwd)){
+        if (!Hash::checkPassword($user->pass, $passwd)) {
             $res['ret'] = 0;
             $res['msg'] = " 密码错误";
-            return $this->echoJson($response,$res);
+            return $this->echoJson($response, $res);
         }
         Auth::logout();
         $user->delete();
         $res['ret'] = 1;
         $res['msg'] = "GG!您的帐号已经从我们的系统中删除.";
-        return $this->echoJson($response,$res);
+        return $this->echoJson($response, $res);
+    }
+
+    public function trafficLog($request, $response, $args)
+    {
+        $pageNum = 1;
+        if (isset($request->getQueryParams()["page"])) {
+            $pageNum = $request->getQueryParams()["page"];
+        }
+        $traffic = TrafficLog::where('user_id', $this->user->id)->orderBy('id', 'desc')->paginate(15, ['*'], 'page', $pageNum);
+        $traffic->setPath('/user/trafficlog');
+        return $this->view()->assign('logs', $traffic)->display('user/trafficlog.tpl');
     }
 }

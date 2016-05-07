@@ -2,43 +2,48 @@
 
 namespace App\Controllers\Admin;
 
+use App\Controllers\AdminController;
 use App\Models\User;
-use App\Controllers\BaseController;
 use App\Utils\Hash;
 use App\Utils\Tools;
 
-class UserController extends BaseController
+class UserController extends AdminController
 {
-    public function index($request, $response, $args){
+    public function index($request, $response, $args)
+    {
         $pageNum = 1;
-        if(isset($request->getQueryParams()["page"])){
+        if (isset($request->getQueryParams()["page"])) {
             $pageNum = $request->getQueryParams()["page"];
         }
-        $users = User::paginate(15,['*'],'page',$pageNum);
+        $users = User::paginate(15, ['*'], 'page', $pageNum);
         $users->setPath('/admin/user');
-        return $this->view()->assign('users',$users)->display('admin/user/index.tpl');
+        return $this->view()->assign('users', $users)->display('admin/user/index.tpl');
     }
 
-    public function edit($request, $response, $args){
+    public function edit($request, $response, $args)
+    {
         $id = $args['id'];
         $user = User::find($id);
-        if ($user == null){
+        if ($user == null) {
 
         }
-        return $this->view()->assign('user',$user)->display('admin/user/edit.tpl');
+        return $this->view()->assign('user', $user)->display('admin/user/edit.tpl');
     }
 
-    public function update($request, $response, $args){
+    public function update($request, $response, $args)
+    {
         $id = $args['id'];
         $user = User::find($id);
 
-        $user->email =  $request->getParam('email');
+        $user->email = $request->getParam('email');
         if ($request->getParam('pass') != '') {
             $user->pass = Hash::passwordHash($request->getParam('pass'));
         }
-        $user->port =  $request->getParam('port');
-        $user->passwd = $request->getParam('passwd');
-        $user->transfer_enable = $request->getParam('transfer_enable');
+        if ($request->getParam('passwd') != '') {
+            $user->passwd = $request->getParam('passwd');
+        }
+        $user->port = $request->getParam('port');
+        $user->transfer_enable = Tools::toGB($request->getParam('transfer_enable'));
         $user->invite_num = $request->getParam('invite_num');
         $user->method = $request->getParam('method');
         $user->enable = $request->getParam('enable');
@@ -66,7 +71,7 @@ class UserController extends BaseController
                 }
                 break;
         }
-        if(!$user->save()){
+        if (!$user->save()) {
             $rs['ret'] = 0;
             $rs['msg'] = "修改失败";
             return $response->getBody()->write(json_encode($rs));
@@ -77,10 +82,11 @@ class UserController extends BaseController
         return $response->getBody()->write(json_encode($rs));
     }
 
-    public function delete($request, $response, $args){
+    public function delete($request, $response, $args)
+    {
         $id = $args['id'];
         $user = User::find($id);
-        if(!$user->delete()){
+        if (!$user->delete()) {
             $rs['ret'] = 0;
             $rs['msg'] = "删除失败";
             return $response->getBody()->write(json_encode($rs));
@@ -90,7 +96,8 @@ class UserController extends BaseController
         return $response->getBody()->write(json_encode($rs));
     }
 
-    public function deleteGet($request, $response, $args){
+    public function deleteGet($request, $response, $args)
+    {
         $id = $args['id'];
         $user = User::find($id);
         $user->delete();
