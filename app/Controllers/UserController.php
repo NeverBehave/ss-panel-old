@@ -56,14 +56,8 @@ class UserController extends BaseController
         $json = json_encode($ary);
         $ssurl =  $ary['method'].":".$this->user->passwd."@".$node->server.":".$this->user->port;
         $ssqr = "ss://".base64_encode($ssurl);
-        if ( 64 !== strlen( $this->user->surgetoken ) ) {
-            $this->user->surgetoken = Tools::genRandomChar( 64 );
-            $this->user->save();
-        }
-        $surgeurl = "https://ssworld.ga/surge.php?uid={$this->user->id}&node={$node->id}&token={$this->user->surgetoken}";
-        $surgeraw = Tools::getSurgeConf( $node->server, $this->user->port, $node->method, $this->user->passwd, Config::get( "surgeSSModule" ) );
         $sscmd = "ss-local -s {$node->server} -p {$this->user->port} -l 1080 -m {$node->method} -k '{$this->user->passwd}'";
-        return $this->view()->assign('json',$json)->assign('ssqr',$ssqr)->assign('surgeraw',$surgeraw)->assign('sscmd',$sscmd)->assign('surgeurl', $surgeurl)->display('user/nodeinfo.tpl');
+        return $this->view()->assign('json',$json)->assign('ssqr',$ssqr)->assign('sscmd',$sscmd)->display('user/nodeinfo.tpl');
     }
 
     public function profile(){
