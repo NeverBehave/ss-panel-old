@@ -102,7 +102,7 @@
                                                 </option>
                                                 <option value="2" {if $node->type==2}selected="selected"{/if}>AnyConnect only
                                                 </option>
-                                                <option value="3" {if $node->type==2}selected="selected"{/if}>Shadowsocks + AnyConnect
+                                                <option value="3" {if $node->type==3}selected="selected"{/if}>Shadowsocks + AnyConnect
                                                 </option>
                                                 <option value="0" {if $node->type==0}selected="selected"{/if}>隐藏
                                                 </option>
