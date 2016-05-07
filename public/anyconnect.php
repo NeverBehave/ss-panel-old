@@ -8,7 +8,7 @@ use App\Models\Node;
 define('PUBLIC_PATH', __DIR__);
 
 // Bootstrap
-require PUBLIC_PATH.'/../bootstrap.php';
+require PUBLIC_PATH.'/../bootstrap/app.php';
 
 $key = Config::get( "apikey" );
 if ( php_sapi_name() !== 'cli' && $_GET['key'] !== $key ) {
