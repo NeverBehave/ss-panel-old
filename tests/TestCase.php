@@ -2,11 +2,15 @@
 
 namespace Tests;
 
-use PHPUnit_Framework_TestCase;
 use App\Services\Config;
+use PHPUnit_Framework_TestCase;
+use Slim\Http\Body;
 use Slim\Http\Environment;
+use Slim\Http\Headers;
 use Slim\HTTP\Request;
+use Slim\Http\RequestBody;
 use Slim\Http\Response;
+use Slim\Http\Uri;
 
 class TestCase extends PHPUnit_Framework_TestCase
 {
@@ -19,30 +23,61 @@ class TestCase extends PHPUnit_Framework_TestCase
         $this->setTestingEnv();
     }
 
-
-    public function requestFactory($method, $path, $options)
+    /**
+     * @param $method
+     * @param $path
+     * @param $body
+     * @param $options
+     * @return Request
+     */
+    protected function requestFactory($method, $path, $body = [], $options = [])
     {
-        $query = [];
-        if (isset($options['query'])) {
-            $query = $options['query'];
-        }
-        $environment = Environment::mock([
-                'REQUEST_METHOD' => $method,
-                'REQUEST_URI' => $path,
-                'QUERY_STRING' => http_build_query($query)
-            ]
-        );
-        $request = Request::createFromEnvironment($environment);
-        $request->withMethod($method);
-        $request->withQueryParams($query);
-        if (isset($options['header'])) {
-            foreach ($options['header'] as $key => $value) {
-                $request->withHeader($key, $value);
+        $uri = Uri::createFromString($path);
+        $headers = new Headers();
+        $cookies = [];
+        $_POST['_METHOD'] = $method;
+        if (strtolower($method) != 'get' && is_array($body)) {
+            foreach ($body as $key => $value) {
+                $_POST[$key] = $value;
             }
         }
+        $envMethod = 'POST';
+        if (strtolower($method) == 'get') {
+            $envMethod = 'GET';
+        }
+        $env = Environment::mock([
+            'REQUEST_URI' => $path,
+            'REQUEST_METHOD' => $envMethod,
+            'HTTP_CONTENT_TYPE' => 'multipart/form-data; boundary=---foo'
+        ]);
+        $serverParams = $env->all();
+        $body = $this->buildBody($body);
+        //echo $body->getContents();
+        // @todo
+        // $request = new Request($method, $uri, $headers, $cookies, $serverParams, $body, []);
+        $request = Request::createFromEnvironment($env);
+        unset($_POST);
         return $request;
     }
 
+    /**
+     * @param $input
+     * @return Body
+     */
+    protected function buildBody($input)
+    {
+        $getContent = function () use ($input) {
+            if (is_array($input)) {
+                return http_build_query($input);
+            }
+            return $input;
+        };
+        $content = $getContent();
+        $body = new RequestBody();
+        $body->write($content);
+        $body->rewind();
+        return $body;
+    }
 
     public function createApp()
     {
@@ -51,7 +86,6 @@ class TestCase extends PHPUnit_Framework_TestCase
         $app->run(true);
         return $app;
     }
-
 
     public function request($method, $path, $options = [])
     {
@@ -72,19 +106,19 @@ class TestCase extends PHPUnit_Framework_TestCase
         $this->request('GET', $path, $options);
     }
 
-    public function post($path, $options = [])
+    public function post($path, $body = [], $options = [])
     {
-        $this->request('POST', $path, $options);
+        $this->request('POST', $path, $body, $options);
     }
 
-    public function put($path, $options = [])
+    public function put($path, $body = [], $options = [])
     {
-        $this->request('PUT', $path, $options);
+        $this->request('PUT', $path, $body, $options);
     }
 
-    public function delete($path, $options = [])
+    public function delete($path, $body = [], $options = [])
     {
-        $this->request('DELETE', $path, $options);
+        $this->request('DELETE', $path, $body, $options);
     }
 
     /**
@@ -101,6 +135,19 @@ class TestCase extends PHPUnit_Framework_TestCase
     public function setTestingEnv()
     {
         Config::set('env', 'testing');
+    }
+
+    /**
+     * @param $code
+     * @param null $response
+     */
+    public function checkErrorCode($code, $response = null)
+    {
+        if ($response == null) {
+            $response = $this->response;
+        }
+        $data = json_decode($response->getBody(), true);
+        $this->assertEquals($code, $data['error_code']);
     }
 
 }

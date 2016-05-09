@@ -2,11 +2,15 @@
 
 namespace App\Controllers;
 
+use App\Models\CheckInLog;
 use App\Models\InviteCode;
+use App\Models\Node;
+use App\Models\TrafficLog;
 use App\Services\Auth;
-use App\Models\Node, App\Models\TrafficLog, App\Models\CheckInLog;
-use App\Services\Config,App\Services\DbConfig;
-use App\Utils\Hash, App\Utils\Tools;
+use App\Services\Config;
+use App\Services\DbConfig;
+use App\Utils\Hash;
+use App\Utils\Tools;
 
 
 /**
@@ -21,30 +25,31 @@ class UserController extends BaseController
     {
         $this->user = Auth::getUser();
     }
-    
+
     public function view()
     {
         $userFooter = DbConfig::get('user-footer');
-        return parent::view()->assign('userFooter',$userFooter); 
+        return parent::view()->assign('userFooter', $userFooter);
     }
 
     public function index($request, $response, $args)
     {
         $msg = DbConfig::get('user-index');
-        if($msg == null ){
+        if ($msg == null) {
             $msg = "在后台修改用户中心公告...";
         }
-        return $this->view()->assign('msg',$msg)->display('user/index.tpl');
+        return $this->view()->assign('msg', $msg)->display('user/index.tpl');
     }
 
     public function node(){
         $msg = DbConfig::get('user-node');
+        $user = Auth::getUser();
         $nodes = Node::whereRaw('type = 1 or type = 3')->orderBy('sort')->get();
-        if ($this->user->ac_enable){
+        if ($user->ac_enable){
             $acnodes = Node::whereRaw('type = 2 or type = 3')->orderBy('sort')->get();
-            return $this->view()->assign('nodes',$nodes)->assign('acnodes',$acnodes)->assign('msg',$msg)->display('user/node.tpl');
+            return $this->view()->assign('nodes',$nodes)->assign('acnodes',$acnodes)->assign('user', $user)->assign('msg',$msg)->display('user/node.tpl');
         }
-        return $this->view()->assign('nodes',$nodes)->assign('msg', $msg)->display('user/node.tpl');
+        return $this->view()->assign('nodes',$nodes)->assign('user', $user)->assign('msg', $msg)->display('user/node.tpl');
     }
 
 
@@ -216,6 +221,15 @@ class UserController extends BaseController
         $this->user->transfer_enable_next = $this->user->transfer_enable_next + Tools::toMB($trafficnext);
         $this->user->last_check_in_time = time();
         $this->user->save();
+        // checkin log
+        try {
+            $log = new CheckInLog();
+            $log->user_id = Auth::getUser()->id;
+            $log->traffic = $traffic;
+            $log->checkin_at = time();
+            $log->save();
+        } catch (\Exception $e) {
+        }
         $res['msg'] = sprintf("获得了本月 %u MB流量，下月 %u MB流量。", $traffic, $trafficnext);
         $res['ret'] = 1;
         return $this->echoJson($response, $res);

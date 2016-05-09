@@ -2,16 +2,16 @@
 
 namespace Tests\Services;
 
-use Tests\TestCase;
 use App\Services\Cache\Factory;
 use App\Services\Config;
+use Tests\TestCase;
 
 class CacheTest extends TestCase
 {
     public function testCache()
     {
         $driverArray = [
-            'redis', 'file'
+            'redis', 'file', 'default'
         ];
         foreach ($driverArray as $driver) {
             $this->TestingCache($driver);
@@ -30,7 +30,16 @@ class CacheTest extends TestCase
         $this->assertEquals($value, $client->get($key));
 
         $client->del($key);
-        $this->assertEquals(null, $this->get($key));
-        $this->assertEquals(null,$this->get(time()));
+        $this->assertEquals(null, $client->get($key));
+
+
+        // test expired
+        $ttl = 1;
+        $client->set($key, $value, $ttl);
+        sleep(2);
+        $this->assertEquals(null, $client->get($key));
+
+        // test wrong key
+        $this->assertEquals(null, $client->get(time()));
     }
 }
