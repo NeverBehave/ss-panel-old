@@ -18,6 +18,11 @@ class Analytics
         return User::where('last_check_in_time', '>', 0)->count();
     }
 
+    public function getTelegramUser()
+    {
+        return User::whereNotNull('telegram_id')->count();
+    }
+
     public function getTrafficUsage()
     {
         $total = User::sum('u') + USer::sum('d');
