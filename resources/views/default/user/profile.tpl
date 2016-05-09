@@ -26,10 +26,10 @@
                             <dt>邮箱</dt>
                             <dd>{$user->email}</dd>
                             <dt>AnyConnect</dt>
-                            <dd>{$user->acstatus}</dd>
+                            <dd>{$acstatus}</dd>
                             <dt>Telegram</dt>
                             <dd>
-                                {$user->telestatus}
+                                {$telestatus}
                                 {if $telelink}<a href="{$telelink}">现在绑定</a>{/if}
                             </dd>
                         </dl>
