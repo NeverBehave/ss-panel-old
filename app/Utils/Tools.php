@@ -205,4 +205,20 @@ class Tools
         }
         return $user->port;
     }
+
+    /**
+     * @return int
+     */
+    public static function getAvailablePort()
+    {
+        $user = User::orderBy('id', 'desc')->first();
+        if ($user == null) {
+             return 1024;
+        }
+        $port = $user->port + 1;
+        if (User::where("port", $port)->first() != null) {
+            $port = self::getLastPort() + 1;
+        }
+        return $port;
+    }
 }
