@@ -124,6 +124,29 @@
                                         </div>
                                     </div>
                                 </fieldset>
+                                {if $user->ac_enable}
+                                <fieldset class="col-sm-6">
+                                    <legend>AnyConnect连接信息</legend>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">用户名</label>
+
+                                        <div class="col-sm-9">
+                                            <input class="form-control" id="ac_user_name" value="{$user->ac_user_name}">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">密码</label>
+
+                                        <div class="col-sm-9">
+                                            <input class="form-control" id="ac_passwd" value="{$user->ac_passwd}">
+                                        </div>
+                                    </div>
+                                </fieldset>
+                                {else}
+                                <input type="hidden" id="ac_user_name" value="{$user->ac_user_name}">
+                                <input type="hidden" id="ac_passwd" value="{$user->ac_passwd}">
+                                {/if}
                             </div>
                             <div class="row">
                                 <fieldset class="col-sm-6">
@@ -206,6 +229,8 @@
                     enable: $("#enable").val(),
                     is_admin: $("#is_admin").val(),
                     ac_enable: $("#ac_enable").val(),
+                    ac_user_name: $("#ac_user_name").val(),
+                    ac_passwd: $("#ac_passwd").val(),
                     ref_by: $("#ref_by").val()
                 },
                 success: function (data) {

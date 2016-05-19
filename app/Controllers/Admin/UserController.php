@@ -50,6 +50,16 @@ class UserController extends AdminController
         $user->is_admin = $request->getParam('is_admin');
         $user->ref_by = $request->getParam('ref_by');
         $acmod = false;
+        if($user->ac_enable){
+            if($user->ac_user_name != $request->getParam('ac_user_name')){
+                $user->ac_user_name = $request->getParam('ac_user_name');
+                $acmod = true;
+            }
+            if($user->ac_passwd != $request->getParam('ac_passwd')){
+                $user->ac_passwd = $request->getParam('ac_passwd');
+                $acmod = true;
+            }
+        }
         switch($request->getParam('ac_enable')){
             case "1":
                 if($user->ac_enable) continue;
