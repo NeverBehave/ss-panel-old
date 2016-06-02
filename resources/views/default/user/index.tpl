@@ -26,10 +26,6 @@
                     <!-- /.box-body -->
                 </div>
                 <!-- /.box -->
-            </div>
-            <!-- /.col (right) -->
-
-            <div class="col-md-6">
                 <div class="panel panel-primary">
                     <div class="panel-heading">
                         流量使用情况
@@ -86,10 +82,6 @@
                     <!-- /.box-body -->
                 </div>
                 <!-- /.box -->
-            </div>
-            <!-- /.col (right) -->
-
-            <div class="col-md-6">
                 <div class="panel panel-primary">
                     <div class="panel-heading">
                         连接信息
