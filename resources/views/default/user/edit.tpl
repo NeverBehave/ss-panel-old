@@ -31,15 +31,13 @@
             <!-- left column -->
             <div class="col-md-6">
                 <!-- general form elements -->
-                <div class="box box-primary">
-                    <div class="box-header">
-                        <i class="fa fa-key"></i>
-
-                        <h3 class="box-title">网站登录密码修改</h3>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        网站登录密码修改
                     </div>
                     <!-- /.box-header --><!-- form start -->
 
-                    <div class="box-body">
+                    <div class="panel-body">
                         <div class="form-horizontal">
 
                             <div id="msg-success" class="alert alert-info alert-dismissable" style="display:none">
@@ -77,7 +75,7 @@
                     </div>
                     <!-- /.box-body -->
 
-                    <div class="box-footer">
+                    <div class="panel-footer">
                         <button type="submit" id="pwd-update" class="btn btn-primary">修改</button>
                     </div>
 
@@ -87,14 +85,12 @@
 
             <div class="col-md-6">
 
-                <div class="box box-primary">
-                    <div class="box-header">
-                        <i class="fa fa-link"></i>
-
-                        <h3 class="box-title">Shadowsocks连接信息修改</h3>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Shadowsocks 连接信息修改
                     </div>
                     <!-- /.box-header -->
-                    <div class="box-body">
+                    <div class="panel-body">
                         <div class="form-horizontal">
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">连接密码</label>
@@ -123,20 +119,18 @@
                             </div>
 
                         </div>
-                        <div class="box-footer"></div>
+                        <div class="panel-footer"></div>
                     </div>
                     <!-- /.box-body -->
                 </div>
                 <!-- /.box -->
                 {if $user->ac_enable}
-                <div class="box box-primary">
-                    <div class="box-header">
-                        <i class="fa fa-link"></i>
-
-                        <h3 class="box-title">AnyConnect 连接信息修改</h3>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        AnyConnect 连接信息修改
                     </div>
                     <!-- /.box-header -->
-                    <div class="box-body">
+                    <div class="panel-body">
                         <div class="form-horizontal">
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">连接密码</label>
@@ -152,7 +146,7 @@
                             </div>
 
                         </div>
-                        <div class="box-footer"></div>
+                        <div class="panel-footer"></div>
                     </div>
                     <!-- /.box-body -->
                 </div>

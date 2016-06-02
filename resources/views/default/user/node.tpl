@@ -15,7 +15,7 @@
         <!-- START PROGRESS BARS -->
         <div class="row">
             <div class="col-md-12">
-                <div class="callout callout-warning">
+                <div class="alert alert-warning">
                     <h4>注意!</h4>
                     <p>请勿在任何地方公开节点地址！</p>
                     <p>流量比例为0.5即使用1000MB按照500MB流量记录记录结算.</p>
@@ -28,8 +28,8 @@
         {foreach $nodes as $node}
             <div class="row">
                 <div class="col-md-12">
-                    <div class="box box-widget">
-                        <div class="box-body">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
                             <ul class="products-list product-list-in-box">
                                 <li class="item">
                                     <div class="product-img">
@@ -45,7 +45,7 @@
                                 </li><!-- /.item -->
                             </ul>
                         </div>
-                        <div class="box-footer no-padding">
+                        <div class="panel-body">
                             <div class="row">
                                 <div class="col-md-6">
                                     <ul class="nav nav-stacked">

@@ -14,7 +14,7 @@
     <section class="content">
         <div class="row">
             <div class="col-md-12">
-                <div class="callout callout-warning">
+                <div class="alert alert-warning">
                     <h4>注意!</h4>
                     <p>部分节点不支持流量记录.</p>
                 </div>

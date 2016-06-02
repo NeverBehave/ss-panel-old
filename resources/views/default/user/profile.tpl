@@ -13,13 +13,11 @@
             <!-- left column -->
             <div class="col-md-6">
                 <!-- general form elements -->
-                <div class="box box-primary">
-                    <div class="box-header">
-                        <i class="fa fa-user"></i>
-
+                <div class="panel panel-default">
+                    <div class="panel-heading">
                         <h3 class="box-title">我的帐号</h3>
                     </div>
-                    <div class="box-body">
+                    <div class="panel-body">
                         <dl class="dl-horizontal">
                             <dt>用户名</dt>
                             <dd>{$user->user_name}</dd>
@@ -35,7 +33,7 @@
                         </dl>
 
                     </div>
-                    <div class="box-footer">
+                    <div class="panel-footer">
                         <a class="btn btn-danger btn-sm" href="kill">删除我的账户</a>
                     </div>
                     <!-- /.box -->

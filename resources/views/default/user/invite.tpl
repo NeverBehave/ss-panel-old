@@ -26,14 +26,12 @@
             <!-- left column -->
             <div class="col-md-6">
                 <!-- general form elements -->
-                <div class="box box-primary">
-                    <div class="box-header">
-                        <i class="fa fa-rocket"></i>
-
-                        <h3 class="box-title">邀请</h3>
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        邀请
                     </div>
                     <!-- /.box-header -->
-                    <div class="box-body">
+                    <div class="panel-body">
                         <p>当前您可以生成<code>{$user->invite_num}</code>个邀请码。 </p>
                         {if $user->invite_num }
                             <button id="invite" class="btn btn-sm btn-info">生成我的邀请码</button>
@@ -69,7 +67,7 @@
             </div>
 
             <div class="col-md-6">
-                <div class="callout callout-warning">
+                <div class="alert alert-warning">
                     <h4>注意！</h4>
 
                     <p>邀请码请给认识的需要的人。</p>
@@ -77,7 +75,7 @@
                     <p>邀请有记录，若被邀请的人违反用户协议，您将会有连带责任。</p>
                 </div>
 
-                <div class="callout callout-info">
+                <div class="alert alert-info">
                     <h4>说明</h4>
 
                     <p>用户注册48小时后，才可以生成邀请码。</p>

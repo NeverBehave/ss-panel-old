@@ -15,14 +15,12 @@
         <!-- START PROGRESS BARS -->
         <div class="row">
             <div class="col-md-6">
-                <div class="box box-primary">
-                    <div class="box-header">
-                        <i class="fa fa-bullhorn"></i>
-
-                        <h3 class="box-title">公告&FAQ</h3>
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        公告&amp;FAQ
                     </div>
                     <!-- /.box-header -->
-                    <div class="box-body">
+                    <div class="panel-body">
                         {$msg}
                     </div>
                     <!-- /.box-body -->
@@ -32,18 +30,16 @@
             <!-- /.col (right) -->
 
             <div class="col-md-6">
-                <div class="box box-primary">
-                    <div class="box-header">
-                        <i class="fa fa-exchange"></i>
-
-                        <h3 class="box-title">流量使用情况</h3>
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        流量使用情况
                     </div>
                     <!-- /.box-header -->
-                    <div class="box-body">
+                    <div class="panel-body">
                         <div class="row">
                             <div class="col-xs-12">
-                                <div class="progress progress-striped">
-                                    <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="40"
+                                <div class="progress">
+                                    <div class="progress-bar" role="progressbar" aria-valuenow="40"
                                          aria-valuemin="0" aria-valuemax="100"
                                          style="width: {$user->trafficUsagePercent()}%">
                                         <span class="sr-only">Transfer</span>
@@ -69,14 +65,12 @@
             <!-- /.col (left) -->
 
             <div class="col-md-6">
-                <div class="box box-primary">
-                    <div class="box-header">
-                        <i class="fa fa-pencil"></i>
-
-                        <h3 class="box-title">签到获取流量</h3>
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        签到获取流量
                     </div>
                     <!-- /.box-header -->
-                    <div class="box-body">
+                    <div class="panel-body">
                         <p> 每{$config['checkinTime']}小时可以签到一次。</p>
 
                         <p>上次签到时间：<code>{$user->lastCheckInTime()}</code></p>
@@ -96,14 +90,12 @@
             <!-- /.col (right) -->
 
             <div class="col-md-6">
-                <div class="box box-primary">
-                    <div class="box-header">
-                        <i class="fa  fa-paper-plane"></i>
-
-                        <h3 class="box-title">连接信息</h3>
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        连接信息
                     </div>
                     <!-- /.box-header -->
-                    <div class="box-body">
+                    <div class="panel-body">
                         {if $user->ac_enable}
                         <h4>Shadowsocks</h4>
                         {/if}
