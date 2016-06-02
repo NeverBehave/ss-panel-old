@@ -5,7 +5,8 @@
     <title>{$config["appName"]}</title>
     <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
     <!-- Bootstrap 3.3.2 -->
-    <link href="/assets/public/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+    <!--<link href="/assets/public/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>-->
+    <link href="/assets/public/css/bootstrap.material.min.css" rel="stylesheet" type="text/css"/>
     <!-- Font Awesome Icons -->
     <link href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <!-- Ionicons -->
@@ -15,6 +16,7 @@
     <!-- AdminLTE Skins. Choose a skin from the css/skins
          folder instead of downloading all of them to reduce the load. -->
     <link href="/assets/public/css/skins/_all-skins.min.css" rel="stylesheet" type="text/css"/>
+    <link href="/assets/public/css/ssworld.css" rel="stylesheet" type="text/css" />
 
     <!-- jQuery 2.1.3 -->
     <script src="/assets/public/js/jquery.min.js"></script>
