@@ -68,6 +68,29 @@
                                         </div>
                                     </div>
 
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">用户类型</label>
+
+                                        <div class="col-sm-9">
+                                            <select class="form-control" id="user_type">
+                                                <option value="1" {if $user->user_type==1}selected="selected"{/if}>
+                                                    1
+                                                </option>
+                                                <option value="2" {if $user->user_type==2}selected="selected"{/if}>
+                                                    2
+                                                </option>
+                                                <option value="3" {if $user->user_type==3}selected="selected"{/if}>
+                                                    3
+                                                </option>
+                                                <option value="4" {if $user->user_type==4}selected="selected"{/if}>
+                                                    4
+                                                </option>
+                                                <option value="5" {if $user->user_type==5}selected="selected"{/if}>
+                                                    5
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
 
                                     <div class="form-group">
                                         <label class="col-sm-3 control-label">用户状态</label>
@@ -228,6 +251,7 @@
                     method: $("#method").val(),
                     enable: $("#enable").val(),
                     is_admin: $("#is_admin").val(),
+                    user_type: $("#user_type").val(),
                     ac_enable: $("#ac_enable").val(),
                     ac_user_name: $("#ac_user_name").val(),
                     ac_passwd: $("#ac_passwd").val(),

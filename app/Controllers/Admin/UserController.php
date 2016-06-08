@@ -48,6 +48,7 @@ class UserController extends AdminController
         $user->method = $request->getParam('method');
         $user->enable = $request->getParam('enable');
         $user->is_admin = $request->getParam('is_admin');
+        $user->user_type = $request->getParam('user_type');
         $user->ref_by = $request->getParam('ref_by');
         $acmod = false;
         if($user->ac_enable){
