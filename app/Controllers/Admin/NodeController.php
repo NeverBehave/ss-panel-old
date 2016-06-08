@@ -28,6 +28,7 @@ class NodeController extends AdminController
         $node->traffic_rate = $request->getParam('rate');
         $node->info = $request->getParam('info');
         $node->type = $request->getParam('type');
+        $node->is_redirector = $request->getParam('is_redirector');
         $node->status = $request->getParam('status');
         $node->sort = $request->getParam('sort');
         if (!$node->save()) {
@@ -62,6 +63,7 @@ class NodeController extends AdminController
         $node->traffic_rate = $request->getParam('rate');
         $node->info = $request->getParam('info');
         $node->type = $request->getParam('type');
+        $node->is_redirector = $request->getParam('is_redirector');
         $node->status = $request->getParam('status');
         $node->sort = $request->getParam('sort');
         if (!$node->save()) {

@@ -110,6 +110,18 @@
                                         </div>
                                     </div>
 
+                                    <div class="form-group">
+                                        <label for="is_redirector" class="col-sm-3 control-label">是否中转</label>
+
+                                        <div class="col-sm-9">
+                                            <select class="form-control" id="is_redirector">
+                                                <option value="1" {if $node->type==1}selected="selected"{/if}>是
+                                                </option>
+                                                <option value="0" {if $node->type!=1}selected="selected"{/if}>否
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
 
                                     <div class="form-group">
                                         <label for="status" class="col-sm-3 control-label">节点状态</label>
@@ -165,6 +177,7 @@
                     rate: $("#rate").val(),
                     info: $("#info").val(),
                     type: $("#type").val(),
+                    is_redirector: $('#is_redirector').val(),
                     status: $("#status").val(),
                     sort: $("#sort").val()
                 },

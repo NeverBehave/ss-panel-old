@@ -26,6 +26,7 @@
 
         {if $user->ac_enable}<h2>Shadowsocks</h2>{/if}
         {foreach $nodes as $node}
+            {if $user->user_type >= 5 || $user->is_admin}
             <div class="row">
                 <div class="col-md-12">
                     <div class="panel panel-default">
@@ -56,11 +57,14 @@
                                         <li><a href="./node/{$node->id}">加密方式 <span
                                                         class="pull-right badge bg-green">{if $node->custom_method == 1} {$user->method} {else} {$node->method} {/if}</span></a>
                                         </li>
+                                        {if $node->is_redirector != 1}
                                         <li><a href="./node/{$node->id}">负载: <span
                                                         class="pull-right badge bg-green">{$node->getNodeLoad()}</span></a>
                                         </li>
+                                        {/if}
                                     </ul>
                                 </div>
+                                {if $node->is_redirector != 1}
                                 <div class="col-md-6">
                                     <ul class="nav nav-stacked">
                                         <li><a href="./node/{$node->id}">流量比例 <span
@@ -77,6 +81,7 @@
                                         </li>
                                     </ul>
                                 </div>
+                                {/if}
                             </div>
 
                         </div>
@@ -84,7 +89,7 @@
                 </div><!-- /.col -->
             </div>
             <!-- /.row -->
-
+            {/if}
 
         {/foreach}
 
