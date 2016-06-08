@@ -26,7 +26,7 @@
 
         {if $user->ac_enable}<h2>Shadowsocks</h2>{/if}
         {foreach $nodes as $node}
-            {if $user->user_type >= 5 || $user->is_admin}
+            {if !$node->is_redirector || $user->user_type >= 5 || $user->is_admin }
             <div class="row">
                 <div class="col-md-12">
                     <div class="panel panel-default">
