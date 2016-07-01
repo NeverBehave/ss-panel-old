@@ -115,9 +115,9 @@
 
                                         <div class="col-sm-9">
                                             <select class="form-control" id="is_redirector">
-                                                <option value="1" {if $node->type==1}selected="selected"{/if}>是
+                                                <option value="1" {if $node->is_redirector==1}selected="selected"{/if}>是
                                                 </option>
-                                                <option value="0" {if $node->type!=1}selected="selected"{/if}>否
+                                                <option value="0" {if $node->is_redirector!=1}selected="selected"{/if}>否
                                                 </option>
                                             </select>
                                         </div>
