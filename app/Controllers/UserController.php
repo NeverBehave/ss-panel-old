@@ -82,7 +82,7 @@ class UserController extends BaseController
 
     public function profile($request, $response, $args)
     {
-        $donate_amount = $this->user->donate_anount;
+        $donate_amount = $this->user->donate_amount;
         $userstatus = $this->user->enable ? "正常" : "被禁用";
         $acstatus = $this->user->ac_enable ? "已开通" : "未开通";
         $telestatus = $this->user->telegram_id ? "已绑定" : "未绑定";
