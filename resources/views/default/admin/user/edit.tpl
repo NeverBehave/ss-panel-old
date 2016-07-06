@@ -57,7 +57,7 @@
                                         <label class="col-sm-3 control-label">Telegram_ID</label>
 
                                         <div class="col-sm-9">
-                                            <input class="form-control" id="telegram_id" value="telegram_id" placeholder="未绑定">
+                                            <input class="form-control" id="telegram_id" value="{$user->telegram_id}" placeholder="未绑定">
                                         </div>
                                     </div>
 
@@ -225,6 +225,18 @@
                                         </div>
                                     </div>
                                 </fieldset>
+                                <fieldset class="col-sm-6">
+                                    <legend>捐赠</legend>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">捐赠金额</label>
+
+                                        <div class="col-sm-9">
+                                            <input class="form-control" id="donate_amount" type="number"
+                                                   value="{$user->donate_amount}">
+                                        </div>
+                                    </div>
+
+                                </fieldset>
                             </div>
                         </div>
                     </div>
@@ -264,7 +276,8 @@
                     ac_user_name: $("#ac_user_name").val(),
                     ac_passwd: $("#ac_passwd").val(),
                     ref_by: $("#ref_by").val(),
-                    telegram_id: $("#telegram_id").val()
+                    telegram_id: $("#telegram_id").val(),
+                    donate_amount: $("#donate_amount").val()
                 },
                 success: function (data) {
                     if (data.ret) {

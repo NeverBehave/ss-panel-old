@@ -24,8 +24,8 @@
                                 <th>加密</th>
                                 <th>描述</th>
                                 <th>排序</th>
-                                <th>操作</th>
                                 <th>等级</th>
+                                <th>操作</th>
                             </tr>
                             {foreach $nodes as $node}
                             <tr>
