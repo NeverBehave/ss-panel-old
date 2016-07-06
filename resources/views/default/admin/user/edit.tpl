@@ -251,7 +251,7 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="info" class="col-sm-3 control-label">备注</label>
+                                        <label for="note" class="col-sm-3 control-label">备注</label>
 
                                         <div class="col-sm-9">
                                             <textarea class="form-control" id="note" rows="3"></textarea>
