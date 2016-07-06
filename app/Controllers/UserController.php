@@ -276,4 +276,42 @@ class UserController extends BaseController
         $traffic->setPath('/user/trafficlog');
         return $this->view()->assign('logs', $traffic)->display('user/trafficlog.tpl');
     }
+
+    public function getAllNodes($request){
+        foreach ($ssnodes as $node) {
+            $id = $node->id;
+            $name = $node->name;
+            $address = $node->server;
+            if ( $node->custom_method == 1) {                        //judgement for method
+                $method = $user->method;
+            } Else {
+                $method = $node->method;
+            }
+            $rate = $node->traffic_rate;
+            $port = $user->port;
+            $note = $node->info;
+            $ary['server'] = $address;
+            $ary['server_port'] = $port;
+            $ary['password'] = $password;
+            $ary['method'] = $method;
+
+                $part .= "\r\n";
+                $part .= sprintf(
+                    $part_style,
+                    $address,
+                    $port,
+                    $password,
+                    $method,
+                    $note
+                );
+                $part .= ",";
+            }
+
+
+            $part .= $part_style;
+            $file = sprintf(
+                $file_style,
+                $part
+            );
+    }
 }

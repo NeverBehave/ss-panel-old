@@ -236,6 +236,20 @@
                                         </div>
                                     </div>
 
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">是否钦点</label>
+
+                                        <div class="col-sm-9"><select class="form-control" id="enable">
+                                                <option value="1" {if $user->is_protected==1}selected="selected"{/if}>
+                                                    是
+                                                </option>
+                                                <option value="0" {if $user->is_protected==0}selected="selected"{/if}>
+                                                    否
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+
                                 </fieldset>
                             </div>
                         </div>
@@ -277,7 +291,8 @@
                     ac_passwd: $("#ac_passwd").val(),
                     ref_by: $("#ref_by").val(),
                     telegram_id: $("#telegram_id").val(),
-                    donate_amount: $("#donate_amount").val()
+                    donate_amount: $("#donate_amount").val(),
+                    is_protected: $("#is_protected").val()
                 },
                 success: function (data) {
                     if (data.ret) {
