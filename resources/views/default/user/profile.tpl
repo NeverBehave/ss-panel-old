@@ -25,7 +25,7 @@
                             <dd>{$user->email}</dd>
                             <dt>账户状态</dt>
                             <dd>{$userstatus}</dd>
-                            <dt>账户捐赠金额</dt>
+                            <dt>捐赠金额(折算为RMB)</dt>
                             <dd>{$donate_amount}</dd>
                             <dt>AnyConnect</dt>
                             <dd>{$acstatus}</dd>

@@ -85,8 +85,14 @@ class UserController extends BaseController
         $donate_amount = $this->user->donate_amount;
         $userstatus = $this->user->enable ? "正常" : "被禁用";
         $acstatus = $this->user->ac_enable ? "已开通" : "未开通";
-        $telestatus = $this->user->telegram_id ? "已绑定" : "未绑定";
-        if (!$this->user->telegram_id){
+        $telestatus = $this->user->telegram_id;
+        if ( $telestatus ){
+            $teleststus .=" 为当前用户绑定的ID\r\n";
+            $telestatus .="已绑定";
+        }else{
+            $telestatus = "未绑定";
+        }
+            if (!$this->user->telegram_id){
             $teletoken = Tools::genRandomChar(32);
 	    $this->user->telegram_token = $teletoken;
             $this->user->save();
