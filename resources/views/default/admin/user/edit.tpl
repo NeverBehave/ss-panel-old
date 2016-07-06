@@ -239,7 +239,7 @@
                                     <div class="form-group">
                                         <label class="col-sm-3 control-label">是否钦点</label>
 
-                                        <div class="col-sm-9"><select class="form-control" id="enable">
+                                        <div class="col-sm-9"><select class="form-control" id="is_protected">
                                                 <option value="1" {if $user->is_protected==1}selected="selected"{/if}>
                                                     是
                                                 </option>
@@ -247,6 +247,14 @@
                                                     否
                                                 </option>
                                             </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="info" class="col-sm-3 control-label">备注</label>
+
+                                        <div class="col-sm-9">
+                                            <textarea class="form-control" id="notes" rows="3"></textarea>
                                         </div>
                                     </div>
 
@@ -292,7 +300,8 @@
                     ref_by: $("#ref_by").val(),
                     telegram_id: $("#telegram_id").val(),
                     donate_amount: $("#donate_amount").val(),
-                    is_protected: $("#is_protected").val()
+                    is_protected: $("#is_protected").val(),
+                    notes: $("#notes").val()
                 },
                 success: function (data) {
                     if (data.ret) {
