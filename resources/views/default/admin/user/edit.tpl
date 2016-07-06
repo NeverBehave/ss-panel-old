@@ -254,7 +254,7 @@
                                         <label for="info" class="col-sm-3 control-label">备注</label>
 
                                         <div class="col-sm-9">
-                                            <textarea class="form-control" id="notes" rows="3"></textarea>
+                                            <textarea class="form-control" id="note" rows="3"></textarea>
                                         </div>
                                     </div>
 
@@ -301,7 +301,7 @@
                     telegram_id: $("#telegram_id").val(),
                     donate_amount: $("#donate_amount").val(),
                     is_protected: $("#is_protected").val(),
-                    notes: $("#notes").val()
+                    note: $("#note").val()
                 },
                 success: function (data) {
                     if (data.ret) {

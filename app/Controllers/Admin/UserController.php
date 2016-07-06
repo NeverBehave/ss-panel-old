@@ -52,7 +52,7 @@ class UserController extends AdminController
         $user->ref_by = $request->getParam('ref_by');
         $user->donate_amount = $request->getParam('donate_amount');
         $user->is_protected = $request->getParam('is_protected');
-        $user->notes = $request->getParam('notes');
+        $user->note = $request->getParam('note');
         $acmod = false;
         if($user->ac_enable){
             if($user->ac_user_name != $request->getParam('ac_user_name')){
