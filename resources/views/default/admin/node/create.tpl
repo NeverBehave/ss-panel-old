@@ -121,6 +121,20 @@
                                     </div>
 
                                     <div class="form-group">
+                                        <label for="type" class="col-sm-3 control-label">服务器等级</label>
+
+                                        <div class="col-sm-9">
+                                            <select class="form-control" id="level">
+                                                <option value="1" selected="selected">1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                                <option value="5">5</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
                                         <label for="status" class="col-sm-3 control-label">节点状态</label>
 
                                         <div class="col-sm-9">
@@ -177,7 +191,8 @@
                     type: $("#type").val(),
                     is_redirector: $("#is_redirector").val(),
                     status: $("#status").val(),
-                    sort: $("#sort").val()
+                    sort: $("#sort").val(),
+                    level: $("#level").val()
                 },
                 success: function (data) {
                     if (data.ret) {

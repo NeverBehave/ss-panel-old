@@ -23,6 +23,10 @@
                             <dd>{$user->user_name}</dd>
                             <dt>邮箱</dt>
                             <dd>{$user->email}</dd>
+                            <dt>账户状态</dt>
+                            <dd>{$userstatus}</dd>
+                            <dt>账户捐赠金额</dt>
+                            <dd>{$donate_amount}</dd>
                             <dt>AnyConnect</dt>
                             <dd>{$acstatus}</dd>
                             <dt>Telegram</dt>

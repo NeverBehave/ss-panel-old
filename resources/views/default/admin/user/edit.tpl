@@ -54,6 +54,14 @@
                                     </div>
 
                                     <div class="form-group">
+                                        <label class="col-sm-3 control-label">Telegram_ID</label>
+
+                                        <div class="col-sm-9">
+                                            <input class="form-control" id="telegram_id" value="telegram_id" placeholder="未绑定">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
                                         <label class="col-sm-3 control-label">是否管理员</label>
 
                                         <div class="col-sm-9">
@@ -255,7 +263,8 @@
                     ac_enable: $("#ac_enable").val(),
                     ac_user_name: $("#ac_user_name").val(),
                     ac_passwd: $("#ac_passwd").val(),
-                    ref_by: $("#ref_by").val()
+                    ref_by: $("#ref_by").val(),
+                    telegram_id: $("#telegram_id").val()
                 },
                 success: function (data) {
                     if (data.ret) {

@@ -30,6 +30,7 @@
                                 <th>注册时间</th>
                                 <th>注册IP</th>
                                 <th>邀请者</th>
+                                <th>telegram id</th>
                                 <th>操作</th>
                             </tr>
                             {foreach $users as $user}
@@ -45,6 +46,7 @@
                                 <th>{$user->reg_date}</th>
                                 <th>{$user->reg_ip}</th>
                                 <th>{$user->ref_by}</th>
+                                <th>{$user->telegram_id}</th>
                                 <td>
                                     <a class="btn btn-info btn-sm" href="/admin/user/{$user->id}/edit">编辑</a>
                                     <a class="btn btn-danger btn-sm" id="delete" value="{$user->id}" href="/admin/user/{$user->id}/delete">删除</a>

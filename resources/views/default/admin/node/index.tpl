@@ -25,6 +25,7 @@
                                 <th>描述</th>
                                 <th>排序</th>
                                 <th>操作</th>
+                                <th>等级</th>
                             </tr>
                             {foreach $nodes as $node}
                             <tr>
@@ -33,6 +34,7 @@
                                 <td>{$node->method}</td>
                                 <td>{$node->info}</td>
                                 <td>{$node->sort}</td>
+                                <td>{$node->level}</td>
                                 <td>
                                     <a class="btn btn-info btn-sm" href="/admin/node/{$node->id}/edit">编辑</a>
                                     <a class="btn btn-danger btn-sm" id="delete" value="{$node->id}" href="/admin/node/{$node->id}/delete">删除</a>

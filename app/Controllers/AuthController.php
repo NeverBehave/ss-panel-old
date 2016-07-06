@@ -88,6 +88,12 @@ class AuthController extends BaseController
         return $this->view()->assign('code', $code)->assign('requireEmailVerification', $requireEmailVerification)->display('auth/register.tpl');
     }
 
+    /**
+     * @param $request
+     * @param $response
+     * @param $args
+     * @return mixed
+     */
     public function registerHandle($request, $response, $args)
     {
         $name = $request->getParam('name');

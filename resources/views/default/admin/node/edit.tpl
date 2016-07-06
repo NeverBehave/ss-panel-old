@@ -110,6 +110,24 @@
                                         </div>
                                     </div>
 
+                                    <label for="type" class="col-sm-3 control-label">服务器等级</label>
+
+                                    <div class="col-sm-9">
+                                        <select class="form-control" id="type">
+                                            <option value="1" {if $node->type==1}selected="selected"{/if}>1
+                                            </option>
+                                            <option value="2" {if $node->type==2}selected="selected"{/if}>2
+                                            </option>
+                                            <option value="3" {if $node->type==3}selected="selected"{/if}>3
+                                            </option>
+                                            <option value="4" {if $node->type==4}selected="selected"{/if}>4
+                                            </option>
+                                            <option value="5" {if $node->type==4}selected="selected"{/if}>5
+                                            </option>
+                                        </select>
+                                    </div>
+                            </div>
+
                                     <div class="form-group">
                                         <label for="is_redirector" class="col-sm-3 control-label">是否中转</label>
 
@@ -179,7 +197,8 @@
                     type: $("#type").val(),
                     is_redirector: $('#is_redirector').val(),
                     status: $("#status").val(),
-                    sort: $("#sort").val()
+                    sort: $("#sort").val(),
+                    level: $("#level").val()
                 },
                 success: function (data) {
                     if (data.ret) {

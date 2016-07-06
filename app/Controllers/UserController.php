@@ -82,6 +82,8 @@ class UserController extends BaseController
 
     public function profile($request, $response, $args)
     {
+        $donate_amount = $this->user->donate_anount;
+        $userstatus = $this->user->enable ? "正常" : "被禁用";
         $acstatus = $this->user->ac_enable ? "已开通" : "未开通";
         $telestatus = $this->user->telegram_id ? "已绑定" : "未绑定";
         if (!$this->user->telegram_id){
@@ -92,7 +94,7 @@ class UserController extends BaseController
         }else{
             $telelink = "";
         }
-        return $this->view()->assign('acstatus',$acstatus)->assign('telestatus',$telestatus)->assign('telelink',$telelink)->display('user/profile.tpl');
+        return $this->view()->assign('donate_amount',$donate_amount)->assign('userstatus',$userstatus)->assign('acstatus',$acstatus)->assign('telestatus',$telestatus)->assign('telelink',$telelink)->display('user/profile.tpl');
     }
 
     public function edit($request, $response, $args)
