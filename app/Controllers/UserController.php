@@ -87,7 +87,7 @@ class UserController extends BaseController
         $acstatus = $this->user->ac_enable ? "已开通" : "未开通";
         $telestatus = $this->user->telegram_id;
         if ( $telestatus ){
-            $teleststus .=" 为当前用户绑定的ID\r\n";
+            $telestatustus .=" 为当前用户绑定的ID\r\n";
             $telestatus .="已绑定";
         }else{
             $telestatus = "未绑定";
