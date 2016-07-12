@@ -285,16 +285,17 @@ class UserController extends BaseController
         $part = "";
         $nodes = Node::whereRaw('type = 1 or type = 3')->orderBy('sort')->get();
         $part_style = <<<EOF
+<p>
  {
 "server" : "%s",
 "server_port" :%s,
 "password" : "%s",
 "method" : "%s",
 "remarks" : "%s"  }
+</p>
 EOF;
         //json 完整文件配置
         $file_style = <<<EOF
-{
 "configs" : [
             %s
             ],
@@ -335,7 +336,6 @@ EOF;
             );
             $part .= ",";
         }
-        $part .= $part_style;
         $file = sprintf(
             $file_style,
             $part

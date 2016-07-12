@@ -118,6 +118,12 @@
                 </li>
 
                 <li>
+                    <a href="http://doge.me/resource">
+                        <i class="fa fa-cubes"></i> <span>资源下载</span>
+                    </a>
+                </li>
+
+                <li>
                     <a href="/user/trafficlog">
                         <i class="fa fa-history"></i> <span>流量记录</span>
                     </a>
