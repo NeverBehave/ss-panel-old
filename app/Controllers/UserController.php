@@ -296,6 +296,7 @@ class UserController extends BaseController
 EOF;
         //json 完整文件配置
         $file_style = <<<EOF
+{
 "configs" : [
             %s
             ],
@@ -308,7 +309,8 @@ EOF;
 "localPort" : 1080,
 "pacUrl" : null,
 "useOnlinePac" : false,
-"availabilityStatistics" : false}
+"availabilityStatistics" : false
+}
 EOF;
         //start dash!
         foreach ($nodes as $node) {
