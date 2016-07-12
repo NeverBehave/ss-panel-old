@@ -41,15 +41,16 @@ class UserController extends BaseController
         return $this->view()->assign('msg', $msg)->display('user/index.tpl');
     }
 
-    public function node(){
+    public function node()
+    {
         $msg = DbConfig::get('user-node');
         $user = Auth::getUser();
         $nodes = Node::whereRaw('type = 1 or type = 3')->orderBy('sort')->get();
-        if ($user->ac_enable){
+        if ($user->ac_enable) {
             $acnodes = Node::whereRaw('type = 2 or type = 3')->orderBy('sort')->get();
-            return $this->view()->assign('nodes',$nodes)->assign('acnodes',$acnodes)->assign('user', $user)->assign('msg',$msg)->display('user/node.tpl');
+            return $this->view()->assign('nodes', $nodes)->assign('acnodes', $acnodes)->assign('user', $user)->assign('msg', $msg)->display('user/node.tpl');
         }
-        return $this->view()->assign('nodes',$nodes)->assign('user', $user)->assign('msg', $msg)->display('user/node.tpl');
+        return $this->view()->assign('nodes', $nodes)->assign('user', $user)->assign('msg', $msg)->display('user/node.tpl');
     }
 
 
@@ -86,21 +87,21 @@ class UserController extends BaseController
         $userstatus = $this->user->enable ? "正常" : "被禁用";
         $acstatus = $this->user->ac_enable ? "已开通" : "未开通";
         $telestatus = $this->user->telegram_id;
-        if ( $telestatus ){
-            $telestatus .=" 为当前用户绑定的ID\r\n";
-            $telestatus .="已绑定";
-        }else{
+        if ($telestatus) {
+            $telestatus .= " 为当前用户绑定的ID\r\n";
+            $telestatus .= "已绑定";
+        } else {
             $telestatus = "未绑定";
         }
-            if (!$this->user->telegram_id){
+        if (!$this->user->telegram_id) {
             $teletoken = Tools::genRandomChar(32);
-	    $this->user->telegram_token = $teletoken;
+            $this->user->telegram_token = $teletoken;
             $this->user->save();
-            $telelink = "https://telegram.me/" . Config::get( "telegramBot" ) . "?start=$teletoken";
-        }else{
+            $telelink = "https://telegram.me/" . Config::get("telegramBot") . "?start=$teletoken";
+        } else {
             $telelink = "";
         }
-        return $this->view()->assign('donate_amount',$donate_amount)->assign('userstatus',$userstatus)->assign('acstatus',$acstatus)->assign('telestatus',$telestatus)->assign('telelink',$telelink)->display('user/profile.tpl');
+        return $this->view()->assign('donate_amount', $donate_amount)->assign('userstatus', $userstatus)->assign('acstatus', $acstatus)->assign('telestatus', $telestatus)->assign('telelink', $telelink)->display('user/profile.tpl');
     }
 
     public function edit($request, $response, $args)
@@ -180,18 +181,19 @@ class UserController extends BaseController
         return $this->echoJson($response, $res);
     }
 
-    public function updateAcPwd($request, $response, $args){
+    public function updateAcPwd($request, $response, $args)
+    {
         $user = Auth::getUser();
-        if ($user->ac_enable){
+        if ($user->ac_enable) {
             $pwd = $request->getParam('acpwd');
-            if(strlen($pwd) < 8){
+            if (strlen($pwd) < 8) {
                 $res['ret'] = 0;
                 $res['msg'] = "密码太短啦";
-            }else{
+            } else {
                 $user->updateAcPwd($pwd);
                 $res['ret'] = 1;
             }
-        }else{
+        } else {
             $res['ret'] = 0;
         }
         return $response->getBody()->write(json_encode($res));
@@ -223,8 +225,8 @@ class UserController extends BaseController
             return $response->getBody()->write(json_encode($res));
         }
         // $traffic = rand(Config::get('checkinMin'),Config::get('checkinMax'));
-        $traffic = rand( $this->user->getCheckinMin(), $this->user->getCheckinMax() );
-        $trafficnext = rand( $this->user->getCheckinMin(), $this->user->getCheckinMax() ) / 2;
+        $traffic = rand($this->user->getCheckinMin(), $this->user->getCheckinMax());
+        $trafficnext = rand($this->user->getCheckinMin(), $this->user->getCheckinMax()) / 2;
         $this->user->transfer_enable = $this->user->transfer_enable + Tools::toMB($traffic);
         $this->user->transfer_enable_next = $this->user->transfer_enable_next + Tools::toMB($trafficnext);
         $this->user->last_check_in_time = time();
@@ -277,41 +279,67 @@ class UserController extends BaseController
         return $this->view()->assign('logs', $traffic)->display('user/trafficlog.tpl');
     }
 
-    public function getAllNodes($request){
-        foreach ($ssnodes as $node) {
+    public function getAllNodes($request)
+    {
+        //init
+        $part = "";
+        $nodes = Node::whereRaw('type = 1 or type = 3')->orderBy('sort')->get();
+        $part_style = <<<EOF
+ {
+"server" : "%s",
+"server_port" :%s,
+"password" : "%s",
+"method" : "%s",
+"remarks" : "%s"  }
+EOF;
+        //json 完整文件配置
+        $file_style = <<<EOF
+{
+"configs" : [
+            %s
+            ],
+"strategy" : null,
+"index" : 10,
+"global" : false,
+"enabled" : false,
+"shareOverLan" : false,
+"isDefault" : false,
+"localPort" : 1080,
+"pacUrl" : null,
+"useOnlinePac" : false,
+"availabilityStatistics" : false}
+EOF;
+        //start dash!
+        foreach ($nodes as $node) {
             $id = $node->id;
             $name = $node->name;
             $address = $node->server;
-            if ( $node->custom_method == 1) {                        //judgement for method
-                $method = $user->method;
+            if ($node->custom_method == 1) {                        //judgement for method
+                $method = $this->user->method;
             } Else {
                 $method = $node->method;
             }
             $rate = $node->traffic_rate;
-            $port = $user->port;
-            $note = $node->info;
-            $ary['server'] = $address;
-            $ary['server_port'] = $port;
-            $ary['password'] = $password;
-            $ary['method'] = $method;
-
-                $part .= "\r\n";
-                $part .= sprintf(
-                    $part_style,
-                    $address,
-                    $port,
-                    $password,
-                    $method,
-                    $note
-                );
-                $part .= ",";
-            }
-
-
-            $part .= $part_style;
-            $file = sprintf(
-                $file_style,
-                $part
+            $port = $this->user->port;
+            $note = "节点ID:" . $id . ";节点名称" . $name . " 流量比例" . $rate;
+            $note .= $node->info;
+            $password = $this->user->passwd;
+            $part .= "\r\n";
+            $part .= sprintf(
+                $part_style,
+                $address,
+                $port,
+                $password,
+                $method,
+                $note
             );
+            $part .= ",";
+        }
+        $part .= $part_style;
+        $file = sprintf(
+            $file_style,
+            $part
+        );
+        return $this->view()->assign('file',$file)->display('user/json.tpl');;
     }
 }
