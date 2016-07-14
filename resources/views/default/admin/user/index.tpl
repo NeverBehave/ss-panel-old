@@ -40,15 +40,15 @@
                                 <td>#{$user->id}</td>
                                 <td>{$user->email}</td>
                                 <td>{$user->port}</td>
-                                <td>{$user->enable ? "正常" : "禁用"}</td>
-                                <td>{$user->allow_login ? "正常" : "禁用"}</td>
+                                <td>{$user->enable}</td>
+                                <td>{$user->allow_login}</td>
                                 <td>{$user->method}</td>
                                 <td>{$user->usedTraffic()}/{$user->enableTraffic()}</td>
                                 <td>{$user->lastSsTime()}</td>
                                 <td>{$user->lastCheckInTime()}</td>
                                 <th>{$user->reg_date}</th>
                                 <th>{$user->reg_ip}</th>
-                                <td>{$user->is_protected ? "是" : "否"}</td>
+                                <td>{$user->is_protected}</td>
                                 <th>{$user->ref_by}</th>
                                 <th>{$user->telegram_id}</th>
                                 <td>
