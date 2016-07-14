@@ -111,6 +111,11 @@ CREATE TABLE `user` (
   `method` varchar(64) NOT NULL DEFAULT 'rc4-md5',
   `is_email_verify` tinyint(4) NOT NULL DEFAULT '0',
   `reg_ip` varchar(128) NOT NULL DEFAULT '127.0.0.1',
+  `allow_login` varchar(2) NOT NULL DEFAULT '1',
+  `telegram_id` varchar(128) NOT NULL DEFAULT '0',
+  `is_protected` int(2) NOT NULL DEFAULT '0',
+  `donate_amount` int(11) NOT NULL DEFAULT '0'
+  `coins` int(11) NOT NULL DEFAULT '1500',
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`),
   UNIQUE KEY `port` (`port`)
@@ -152,5 +157,3 @@ CREATE TABLE `ss_checkin_log` (
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-

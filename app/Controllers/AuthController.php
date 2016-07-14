@@ -30,6 +30,7 @@ class AuthController extends BaseController
     // Login Error Code
     const UserNotExist = 601;
     const UserPasswordWrong = 602;
+    const UserIsProhibited = 603;
 
     // Verify Email
     const VerifyEmailWrongEmail = 701;
@@ -64,6 +65,14 @@ class AuthController extends BaseController
             $res['msg'] = "邮箱或者密码错误";
             return $this->echoJson($response, $res);
         }
+
+        if ( !$user->allow_login ){
+            $res['ret'] = 0;
+            $res['error_code'] = self::UserIsProhibited;
+            $res['msg'] = "用户被禁止登录!请联系管理员获得帮助";
+            return $this->echoJson($response, $res);
+        }
+
         // @todo
         $time = 3600 * 24;
         if ($rememberMe) {

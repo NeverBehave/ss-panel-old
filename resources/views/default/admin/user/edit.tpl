@@ -101,13 +101,27 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label class="col-sm-3 control-label">用户状态</label>
+                                        <label class="col-sm-3 control-label">Shadowsocks状态</label>
 
                                         <div class="col-sm-9"><select class="form-control" id="enable">
                                                 <option value="1" {if $user->enable==1}selected="selected"{/if}>
                                                     正常
                                                 </option>
                                                 <option value="0" {if $user->enable==0}selected="selected"{/if}>
+                                                    禁用
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">面板登录</label>
+
+                                        <div class="col-sm-9"><select class="form-control" id="allow_login">
+                                                <option value="1" {if $user->allow_login==1}selected="selected"{/if}>
+                                                    正常
+                                                </option>
+                                                <option value="0" {if $user->allow_login==0}selected="selected"{/if}>
                                                     禁用
                                                 </option>
                                             </select>
@@ -301,6 +315,7 @@
                     telegram_id: $("#telegram_id").val(),
                     donate_amount: $("#donate_amount").val(),
                     is_protected: $("#is_protected").val(),
+                    allow_login: $("#allow_login").val(),
                     note: $("#note").val()
                 },
                 success: function (data) {
