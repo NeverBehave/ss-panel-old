@@ -23,12 +23,14 @@
                                 <th>邮箱</th>
                                 <th>端口</th>
                                 <th>状态</th>
+                                <th>面板</th>
                                 <th>加密方式</th>
                                 <th>已用流量/总流量</th>
                                 <th>最后在线时间</th>
                                 <th>最后签到时间</th>
                                 <th>注册时间</th>
                                 <th>注册IP</th>
+                                <th>钦点用户</th>
                                 <th>邀请者</th>
                                 <th>telegram id</th>
                                 <th>操作</th>
@@ -38,13 +40,15 @@
                                 <td>#{$user->id}</td>
                                 <td>{$user->email}</td>
                                 <td>{$user->port}</td>
-                                <td>{$user->enable}</td>
+                                <td>{$user->enable ? "正常" : "禁用"}</td>
+                                <td>{$user->allow_login ? "正常" : "禁用"}</td>
                                 <td>{$user->method}</td>
                                 <td>{$user->usedTraffic()}/{$user->enableTraffic()}</td>
                                 <td>{$user->lastSsTime()}</td>
                                 <td>{$user->lastCheckInTime()}</td>
                                 <th>{$user->reg_date}</th>
                                 <th>{$user->reg_ip}</th>
+                                <td>{$user->is_protected ? "是" : "否"}</td>
                                 <th>{$user->ref_by}</th>
                                 <th>{$user->telegram_id}</th>
                                 <td>
