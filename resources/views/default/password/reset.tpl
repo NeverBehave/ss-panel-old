@@ -30,8 +30,8 @@
             <h4><i class="icon fa fa-warning"></i> 出错了!</h4>
             <p id="msg-error-p"></p>
         </div>
-        <a href="/auth/login">登陆</a><br>
-        <a href="/auth/register" class="text-center">注册个帐号</a>
+        <a href="/auth/login">登陆</a><!--<br>
+        <a href="/auth/register" class="text-center">注册个帐号</a>-->
 
     </div><!-- /.login-box-body -->
 </div><!-- /.login-box -->
