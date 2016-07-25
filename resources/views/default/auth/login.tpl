@@ -6,7 +6,7 @@
     </div><!-- /.login-logo -->
     <div class="login-box-body">
         <p class="login-box-msg">登录到用户中心</p>
-
+        <p>注意：新注册用户不提供网页面板，请勿向管理员询问面板之事。</p>
         <form>
             <div class="form-group has-feedback">
                 <input id="email" name="Email" type="text" class="form-control" placeholder="邮箱"/>
@@ -39,8 +39,8 @@
             <h4><i class="icon fa fa-warning"></i> 出错了!</h4>
             <p id="msg-error-p"></p>
         </div>
-        <a href="/password/reset">忘记密码</a><br>
-        <a href="/auth/register" class="text-center">注册个帐号</a>
+        <a href="/password/reset">忘记密码</a><!--<br>
+        <a href="/auth/register" class="text-center">注册个帐号</a>-->
 
     </div><!-- /.login-box-body -->
 </div><!-- /.login-box -->
