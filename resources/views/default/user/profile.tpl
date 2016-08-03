@@ -59,28 +59,33 @@
                     <!-- /.box -->
                 </div>
             </div>
-        </div>
-        <div class="col-md-6">
-
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    礼品码
-                </div>
-                <!-- /.box-header -->
-                <div class="panel-body">
-                    <div class="form-horizontal">
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">惊喜?!</label>
-
-                            <div class="col-sm-9">
-                                <div class="input-group">
-                                    <input type="text" id="gift_code" placeholder="来吧" class="form-control">
-                                    <div class="input-group-btn">
-                                        <button type="submit" id="gift_code_update" class="btn btn-primary">提交</button>
+        
+            <div class="col-md-6">
+            
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        礼品码
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="panel-body">
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">惊喜?!</label>
+                            
+                                <div class="col-sm-9">
+                                    <div class="input-group">
+                                        <input type="text" id="gift_code" placeholder="来吧" class="form-control">
+                                        <div class="input-group-btn">
+                                            <button type="submit" id="gift_code_update" class="btn btn-primary">提交</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
     <!-- /.content -->
 </div><!-- /.content-wrapper -->
