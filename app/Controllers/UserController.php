@@ -427,16 +427,15 @@ EOF;
                 $traffic = $code->traffic;
                 $this->user->transfer_enable = $this->user->transfer_enable + Tools::toGB($traffic);
         }
-        $code = GiftCode::find($get_code);
         $this->user->gift_count += 1;
         $code->counts += 1;
-        $code->used_user .= "|" . $this->user->id;
+        $code->used_users .= "|" . $this->user->id;
 
-       /** if (!->save()){
+        if (!$code->save()){
             $res['ret'] = 0;
             $res['msg'] = "应用信息到礼品码时发生错误,请重试";
             return $this->echoJson($response, $res);
-        } **/
+        }
         if (!$this->user->save()) {
             $res['ret'] = 0;
             $res['msg'] = "添加失败!请联系管理员";
