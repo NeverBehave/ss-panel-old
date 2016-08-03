@@ -22,6 +22,7 @@ class UserController extends BaseController
 
     private $user;
 
+
     public function __construct()
     {
         $this->user = Auth::getUser();
@@ -346,19 +347,23 @@ EOF;
         return $this->view()->assign('file', $file)->display('user/json.tpl');
     }
 
-    public function giftCode($request, $response, $args){
-
-    }
+    /**
+     * @param $request
+     * @param $response
+     * @param $args
+     * @return mixed
+     */
     public function verifyCode($request, $response, $args)
     {
-        $user = Auth::getUser();
         $get_code = $request->getParam('gift_code');
-        if ((GiftCode::where('code', $get_code)->value('code')->get()) == null) {
-            $rs['ret'] = 0;
-            $rs['msg'] = "礼品码不存在!";
-            return $response->getBody()->write(json_encode($rs));               //不存在
+
+        if ( GiftCode::where('code', $get_code)->value('code') == null) {
+            $res['ret'] = 0;
+            $res['msg'] = " 礼品码不存在!";
+            return $this->echoJson($response, $res);               //不存在
         }
-        $code = GiftCode::where('code', $get_code)->get();
+        
+        $code = GiftCode::where('code', $get_code)->first();
 
         $get_date = $code->expire_at;
 
@@ -366,25 +371,26 @@ EOF;
             $get_date = strtotime($get_date);
             $now = strtotime("now");
             if ($get_date - $now < 0) {
-                $rs['ret'] = 0;
-                $rs['msg'] = "礼品码已经过期!";
-                return $response->getBody()->write(json_encode($rs)); //待补充:过期
+                $res['ret'] = 0;
+                $res['msg'] = "礼品码已经过期!";
+                return $this->echoJson($response, $res); //过期
             }
         }
-
-        $userid = $user->id;
-        if ($code->level > $userid) {
-            $rs['ret'] = 0;
-            $rs['msg'] = "Doge等级不足以使用邀请码";
-            return $response->getBody()->write(json_encode($rs));       //权限不够
+        $user_id = $this->user->id;
+        $user_type = $this->user->user_type;
+        $level = $code->level;
+        if ( $level > $user_type ) {
+            $res['ret'] = 0;
+            $res['msg'] = "Doge等级不足以使用邀请码";
+            return $this->echoJson($response, $res);       //权限不够
         }
 
-        $users = GiftCode::where('code', $code)->value("used_users")->get();
+        $users = $code->used_users;
         $ids = explode("|", $users);
-        if (in_array($user->id, $ids)) {
-            $rs['ret'] = 0;
-            $rs['msg'] = "这只Doge使用过这个礼品码了呢!";
-            return $response->getBody()->write(json_encode($rs));       //使用过了
+        if ( in_array($user_id, $ids) ) {
+            $res['ret'] = 0;
+            $res['msg'] = "这只Doge使用过这个礼品码了呢!";
+            return $this->echoJson($response, $res);      //使用过了
         }
 
         //Start Dash!
@@ -392,12 +398,12 @@ EOF;
         switch ($code_type) {
             case 0:  //流量
                 $traffic = $code->traffic;
-                $user->transfer_enable = $user->transfer_enable + Tools::toGB($traffic);
+                $this->user->transfer_enable = $this->user->transfer_enable + Tools::toGB($traffic);
             break;
 
             case 1:  //等级
                 $level = $code->gift_level;
-                $user->user_type = $level;
+                $this->user->user_type = $level;
             break;
 
             case 2:  //Anyconnect
@@ -406,50 +412,50 @@ EOF;
                 while(User::where("ac_user_name","=",$acname)->count())
                         $acname = Tools::genRandomChar(16);
                     $acpasswd = Tools::genRandomChar(16);
-                    $user->ac_enable = 1;
-                    $user->ac_user_name = $acname;
-                    $user->ac_passwd = $acpasswd;
+                    $this->user->ac_enable = 1;
+                    $this->user->ac_user_name = $acname;
+                    $this->user->ac_passwd = $acpasswd;
                 break;
 
             case 3:  //Telegram 用户验证需要
                 $telegram_id = $this->user->telegram_id;
                 if ($telegram_id <= 0) {
-                    $rs['ret'] = 0;
-                    $rs['msg'] = "这个礼品码要Doge绑定telegram才能用!";
-                    return $response->getBody()->write(json_encode($rs));           //没有绑定telegram
+                    $res['ret'] = 0;
+                    $res['msg'] = "这个礼品码要Doge绑定telegram才能用!";
+                    return $this->echoJson($response, $res);             //没有绑定telegram
                 }
                 $traffic = $code->traffic;
-                $user->transfer_enable = $this->user->transfer_enable + Tools::toGB($traffic);
+                $this->user->transfer_enable = $this->user->transfer_enable + Tools::toGB($traffic);
         }
+        $code = GiftCode::find($get_code);
+        $this->user->gift_count += 1;
+        $code->counts += 1;
+        $code->used_user .= "|" . $this->user->id;
 
-        $user->gift_count += 1;
-        $code->count += 1;
-        $code->used_user[] = "|" . $user->id;
-
-        if (!$code->save()){
-            $rs['ret'] = 0;
-            $rs['msg'] = "应用信息到礼品码时发生错误,请重试";
-            return $response->getBody()->write(json_encode($rs));
+       /** if (!->save()){
+            $res['ret'] = 0;
+            $res['msg'] = "应用信息到礼品码时发生错误,请重试";
+            return $this->echoJson($response, $res);
+        } **/
+        if (!$this->user->save()) {
+            $res['ret'] = 0;
+            $res['msg'] = "添加失败!请联系管理员";
+            return $this->echoJson($response, $res);
         }
-        if (!$user->save()) {
-            $rs['ret'] = 0;
-            $rs['msg'] = "添加失败!请联系管理员";
-            return $response->getBody()->write(json_encode($rs));
-        }
-        $rs['ret'] = 1;
-        $rs['msg'] = "邀请码应用成功!";
+        $res['ret'] = 1;
+        $res['msg'] = "邀请码应用成功!";
         switch ($code_type){
             case 0:
-               $rs['msg'].="\r\n_{$traffic}_GB流量已经生效。" ;
+               $res['msg'].="\r\n_{$traffic}_GB流量已经生效。" ;
                 break;
             case 1;
-                $rs['msg'].="\r\nDoge等级目前是_{$level}_";
+                $res['msg'].="\r\nDoge等级目前是_{$level}_";
                 break;
             case 2:
-                $rs['msg'].="\r\nAnyConnect 已开通";
+                $res['msg'].="\r\nAnyConnect 已开通";
                 break;
         }
-        return $response->getBody()->write(json_encode($rs));
+        return $this->echoJson($response, $res);
     }
 
 }

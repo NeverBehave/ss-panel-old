@@ -2,12 +2,9 @@
 namespace App\Models;
 
 /**
- * User Model
+ * Gift Model
  */
 
-use App\Services\Config;
-use App\Utils\Hash;
-use App\Utils\Tools;
 
 class GiftCode extends Model
 
