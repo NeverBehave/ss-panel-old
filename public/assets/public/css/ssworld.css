@@ -58,4 +58,14 @@ code {
 .products-list > .item {
 	background: inherit !important;
 }
+
+.dropdown-toggle {
+	padding-top: 15px !important;
+	padding-bottom: 15px !important;
+}
+
+.sidebar-menu-current{
+    color: #fff;
+    background: #1e282c;
+    border-left-color: #3c8dbc;
 }
