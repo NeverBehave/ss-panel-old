@@ -51,7 +51,7 @@ $app->group('/user', function () {
     $this->get('/edit', 'App\Controllers\UserController:edit');
     $this->post('/password', 'App\Controllers\UserController:updatePassword');
     $this->post('/sspwd', 'App\Controllers\UserController:updateSsPwd');
-    $this->post('/codeverify', 'App\Controllers\UserController:verifyCode');
+    $this->post('/verifycode', 'App\Controllers\UserController:verifyCode');
     $this->post('/acpwd', 'App\Controllers\UserController:updateAcPwd');
     $this->post('/method', 'App\Controllers\UserController:updateMethod');
     $this->get('/sys', 'App\Controllers\UserController:sys');

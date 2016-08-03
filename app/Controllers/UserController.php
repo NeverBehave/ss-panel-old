@@ -21,7 +21,6 @@ class UserController extends BaseController
 {
 
     private $user;
-    public $gift_code;
 
     public function __construct()
     {

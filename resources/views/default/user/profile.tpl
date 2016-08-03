@@ -89,7 +89,7 @@
         $("#gift_code_update").click(function () {
             $.ajax({
                 type: "POST",
-                url: "codeverify",
+                url: "verifycode",
                 dataType: "json",
                 data: {
                     gift_code: $("#gift_code").val()
