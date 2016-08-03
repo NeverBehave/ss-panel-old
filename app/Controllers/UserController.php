@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Models\CheckInLog;
 use App\Models\InviteCode;
 use App\Models\Node;
+use App\Models\GiftCode;
 use App\Models\TrafficLog;
 use App\Services\Auth;
 use App\Services\Config;
@@ -20,6 +21,7 @@ class UserController extends BaseController
 {
 
     private $user;
+    public $gift_code;
 
     public function __construct()
     {
@@ -342,6 +344,113 @@ EOF;
             $file_style,
             $part
         );
-        return $this->view()->assign('file',$file)->display('user/json.tpl');;
+        return $this->view()->assign('file', $file)->display('user/json.tpl');
     }
+
+    public function giftCode($request, $response, $args){
+
+    }
+    public function verifyCode($request, $response, $args)
+    {
+        $user = Auth::getUser();
+        $get_code = $request->getParam('gift_code');
+        if ((GiftCode::where('code', $get_code)->value('code')->get()) == null) {
+            $rs['ret'] = 0;
+            $rs['msg'] = "礼品码不存在!";
+            return $response->getBody()->write(json_encode($rs));               //不存在
+        }
+        $code = GiftCode::where('code', $get_code)->get();
+
+        $get_date = $code->expire_at;
+
+        if ($get_date !== null) {
+            $get_date = strtotime($get_date);
+            $now = strtotime("now");
+            if ($get_date - $now < 0) {
+                $rs['ret'] = 0;
+                $rs['msg'] = "礼品码已经过期!";
+                return $response->getBody()->write(json_encode($rs)); //待补充:过期
+            }
+        }
+
+        $userid = $user->id;
+        if ($code->level > $userid) {
+            $rs['ret'] = 0;
+            $rs['msg'] = "Doge等级不足以使用邀请码";
+            return $response->getBody()->write(json_encode($rs));       //权限不够
+        }
+
+        $users = GiftCode::where('code', $code)->value("used_users")->get();
+        $ids = explode("|", $users);
+        if (in_array($user->id, $ids)) {
+            $rs['ret'] = 0;
+            $rs['msg'] = "这只Doge使用过这个礼品码了呢!";
+            return $response->getBody()->write(json_encode($rs));       //使用过了
+        }
+
+        //Start Dash!
+        $code_type = $code->code_type;
+        switch ($code_type) {
+            case 0:  //流量
+                $traffic = $code->traffic;
+                $user->transfer_enable = $user->transfer_enable + Tools::toGB($traffic);
+            break;
+
+            case 1:  //等级
+                $level = $code->gift_level;
+                $user->user_type = $level;
+            break;
+
+            case 2:  //Anyconnect
+                if( $this->user->ac_enable) continue;
+                $acname = Tools::genRandomChar(16);
+                while(User::where("ac_user_name","=",$acname)->count())
+                        $acname = Tools::genRandomChar(16);
+                    $acpasswd = Tools::genRandomChar(16);
+                    $user->ac_enable = 1;
+                    $user->ac_user_name = $acname;
+                    $user->ac_passwd = $acpasswd;
+                break;
+
+            case 3:  //Telegram 用户验证需要
+                $telegram_id = $this->user->telegram_id;
+                if ($telegram_id <= 0) {
+                    $rs['ret'] = 0;
+                    $rs['msg'] = "这个礼品码要Doge绑定telegram才能用!";
+                    return $response->getBody()->write(json_encode($rs));           //没有绑定telegram
+                }
+                $traffic = $code->traffic;
+                $user->transfer_enable = $this->user->transfer_enable + Tools::toGB($traffic);
+        }
+
+        $user->gift_count += 1;
+        $code->count += 1;
+        $code->used_user[] = "|" . $user->id;
+
+        if (!$code->save()){
+            $rs['ret'] = 0;
+            $rs['msg'] = "应用信息到礼品码时发生错误,请重试";
+            return $response->getBody()->write(json_encode($rs));
+        }
+        if (!$user->save()) {
+            $rs['ret'] = 0;
+            $rs['msg'] = "添加失败!请联系管理员";
+            return $response->getBody()->write(json_encode($rs));
+        }
+        $rs['ret'] = 1;
+        $rs['msg'] = "邀请码应用成功!";
+        switch ($code_type){
+            case 0:
+               $rs['msg'].="\r\n_{$traffic}_GB流量已经生效。" ;
+                break;
+            case 1;
+                $rs['msg'].="\r\nDoge等级目前是_{$level}_";
+                break;
+            case 2:
+                $rs['msg'].="\r\nAnyConnect 已开通";
+                break;
+        }
+        return $response->getBody()->write(json_encode($rs));
+    }
+
 }
