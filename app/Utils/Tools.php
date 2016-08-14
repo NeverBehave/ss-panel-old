@@ -2,7 +2,6 @@
 
 namespace App\Utils;
 
-use DB;
 use App\Models\User;
 use App\Services\Config;
 use DateTime;
@@ -212,18 +211,13 @@ class Tools
      */
     public static function getAvailablePort()
     {
-        $lastuser = User::orderBy('id', 'desc')->first();
-        if ($lastuser == null) {
-             return 10001;
+        $user = User::orderBy('id', 'desc')->first();
+        if ($user == null) {
+             return 1024;
         }
-        $newid = $user->id + 1;
-        $port = $newid + 10000; // based on ID
+        $port = $user->port + 1;
         if (User::where("port", $port)->first() != null) {
-            // just use the lowest vacant port
-            $result = DB::select('select t1.port+1 as missing from user as t1 left join user as t2 on t1.port+1 = t2.port where t2.port is null order by t1.port limit 1');
-            foreach ($result as $row) {
-                return $row->missing;
-            }
+            $port = self::getLastPort() + 1;
         }
         return $port;
     }
