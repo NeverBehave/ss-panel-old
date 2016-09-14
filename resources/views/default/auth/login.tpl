@@ -43,8 +43,8 @@
         <a href="/auth/register" class="text-center">注册个帐号</a>-->
 
     </div><!-- /.login-box-body -->
-    <div class="col-xs-4">
-        <button a href="/auth/tglogin" class="btn btn-primary btn-block btn-flat">使用Telegram登录</button>
+    <div class="col-xs-10">
+        <button href="/auth/tglogin" class="btn btn-primary btn-block btn-flat">使用Telegram登录</button>
     </div><!-- /.col -->
 </div><!-- /.login-box -->
 
