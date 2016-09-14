@@ -6,7 +6,7 @@
     </div><!-- /.login-logo -->
     <div class="login-box-body">
         <p class="login-box-msg">登录到用户中心</p>
-        <p>注意：新注册用户不提供网页面板，请勿向管理员询问面板之事。</p>
+        <p>注意：使用机器人注册的用户请使用Telegram登录方式进行登录。</p>
         <form>
             <div class="form-group has-feedback">
                 <input id="email" name="Email" type="text" class="form-control" placeholder="邮箱"/>

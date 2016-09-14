@@ -16,6 +16,7 @@
             </div>
             <h3>请在机器人处输入上面的安全码,全部字母为大写。</h3>
             <h4>输入格式: /login 您的安全码</h4>
+            <h5>如果您已经安装了Telegram客户端,请点击<a href="https://telegram.me/UnstableBot?start={$safecode->safecode}" 这里></a></h5>
         </form>
         {/if}
         {if $error != null}
