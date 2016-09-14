@@ -6,13 +6,16 @@
     </div><!-- /.login-logo -->
     <div class="login-box-body">
         <p class="login-box-msg">登录到用户中心</p>
-        <p>TGLogin Beta</p>
+        <h1>TGLogin Beta</h1>
         {if $safecode != null}
         <form>
             <div class="form-group has-feedback">
-                <p>{$safecode->safecode}</p>
+                <h2>安全码:</h2>
+                <h2>{$safecode->safecode}</h2>
                 <input id="code" type="hidden" name="code" value={$safecode->safecode}>
             </div>
+            <h3>请在机器人处输入上面的安全码,全部字母为大写。</h3>
+            <h4>输入格式: /login 您的安全码</h4>
         </form>
         {/if}
         {if $error != null}
