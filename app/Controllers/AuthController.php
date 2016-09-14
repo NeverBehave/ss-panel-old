@@ -125,6 +125,7 @@ class AuthController extends BaseController
         if ( $expire_at - strtotime("now") < 0 ){
             $res['ret'] = 0;
             $res['msg'] = "安全码已经过期,请刷新重试!";
+            $safecode->delete();
             return $this->echoJson($response, $res);
         }
 
