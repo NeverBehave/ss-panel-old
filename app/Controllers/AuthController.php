@@ -96,6 +96,7 @@ class AuthController extends BaseController
             $error = null;
             $safecode = new TgLogin();
             $safecode->safecode = $random;
+            $safecode->created_at = strtotime("now");
             if ( $safecode->save() ) {
                 return $this->view()->assign('safecode', $safecode)->assign('error', $error)->display('auth/tglogin.tpl');
             }
@@ -120,7 +121,7 @@ class AuthController extends BaseController
             return $this->echoJson($response, $res);
         }
 
-        $created_at = strtotime( $safecode->created_at );
+        $created_at = $safecode->created_at ;
         $expire_at = strtotime("+30 seconds", $created_at);  //验证后的安全码过期时间为30S
         if ( $expire_at - strtotime("now") < 0 ){
             $res['ret'] = 0;
