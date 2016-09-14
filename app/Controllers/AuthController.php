@@ -121,7 +121,7 @@ class AuthController extends BaseController
         }
 
         $created_at = strtotime( $code->created_at );
-        $expire_at = $created_at + strtotime("+2 minutes");
+        $expire_at = $created_at + strtotime("+30 seconds");  //验证后的安全码过期时间为30S
         if ( $expire_at - strtotime("now") < 0 ){
             $res['ret'] = 0;
             $res['msg'] = "安全码已经过期,请刷新重试!";
