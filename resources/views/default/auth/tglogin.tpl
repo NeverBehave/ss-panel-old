@@ -10,7 +10,7 @@
         {if $safecode != null}
         <form>
             <div class="form-group has-feedback">
-                <p>{$safe   code->safecode}</p>
+                <p>{$safecode->safecode}</p>
                 <input type="hidden" name="country" value="Norway">
             </div>
         </form>
