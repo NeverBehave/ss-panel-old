@@ -92,35 +92,35 @@ class AuthController extends BaseController
         $random = strtolower(Tools::genRandomChar(6));
 
         //clean up if exist
-        if ( Tglogin::where('code', $random)->value('code') == null ){
+        if ( Tglogin::where('safecode', $random)->value('safecode') == null ){
             $error = null;
-            $code = new Tglogin();
-            $code->code = $random;
-            if ( $code->save() ) {
-                return $this->view()->assign('code', $code)->assign('error', $error)->display('auth/tglogin.tpl');
+            $safecode = new Tglogin();
+            $safecode->code = $random;
+            if ( $safecode->save() ) {
+                return $this->view()->assign('code', $safecode)->assign('error', $error)->display('auth/tglogin.tpl');
             }
         }
             $code = null;
             $error = "安全码生成失败,请刷新页面重试!";
-            return $this->view()->assign('code', $code)->assign('error', $error)->display('auth/tglogin.tpl');
+            return $this->view()->assign('code', $safecode)->assign('error', $error)->display('auth/tglogin.tpl');
 
     }
 
     public function tglogin_verify($request, $response, $args){
 
         $rememberMe = $request->getParam('remember_me');
-        $code = $request->getParam('code');
+        $safecode = $request->getParam('code');
 
-        $code = Tglogin::where('code', $code)->first();
+        $safecode = Tglogin::where('safecode', $safecode)->first();
 
         //start dash!!
-        if ( $code == null ){
+        if ( $safecode == null ){
             $res['ret'] = 0;
             $res['msg'] = "安全码发生异常!请重试!";
             return $this->echoJson($response, $res);
         }
 
-        $created_at = strtotime( $code->created_at );
+        $created_at = strtotime( $safecode->created_at );
         $diff = strtotime("now") - $created_at;
         if ( $diff > 180 ){
             $res['ret'] = 0;
@@ -128,13 +128,13 @@ class AuthController extends BaseController
             return $this->echoJson($response, $res);
         }
 
-        if ( $code->is_verify == false ){
+        if ( $safecode->is_verify == false ){
             $res['ret'] = 0;
             $res['msg'] = "您尚未验证,请前往Telegram完整登录操作";
             return $this->echoJson($response, $res);
         }
 
-        if ( $code->user_id == null ){
+        if ( $safecode->user_id == null ){
             $res['ret'] = 0;
             $res['msg'] = "500 服务器发生了奇怪的问题,请上报管理员";
             return $this->echoJson($response, $res);
@@ -144,10 +144,10 @@ class AuthController extends BaseController
         if ($rememberMe) {
             $time = 3600 * 24 * 7;
         }
-        Logger::info("login user $code->user_id ");
-        Auth::login($code->user_id, $time);
+        Logger::info("login user $safecode->user_id ");
+        Auth::login($safecode->user_id, $time);
 
-        $code->delete();
+        $safecode->delete();
 
         $res['ret'] = 1;
         $res['msg'] = "欢迎回来";
