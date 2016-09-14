@@ -95,7 +95,7 @@ class AuthController extends BaseController
         if ( TgLogin::where('safecode', $random)->value('safecode') == null ){
             $error = null;
             $safecode = new TgLogin();
-            $safecode->code = $random;
+            $safecode->safecode = $random;
             if ( $safecode->save() ) {
                 return $this->view()->assign('code', $safecode)->assign('error', $error)->display('auth/tglogin.tpl');
             }
