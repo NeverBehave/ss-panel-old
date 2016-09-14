@@ -41,11 +41,8 @@
         </div>
         <a href="/password/reset">忘记密码</a><!--<br>
         <a href="/auth/register" class="text-center">注册个帐号</a>-->
-
+        <a href="/auth/tglogin" class="btn btn-default">使用Telegram登录</a>
     </div><!-- /.login-box-body -->
-    <div class="col-xs-10">
-        <button href="/auth/tglogin" class="btn btn-primary btn-block btn-flat">使用Telegram登录</button>
-    </div><!-- /.col -->
 </div><!-- /.login-box -->
 
 <!-- jQuery 2.1.3 -->
