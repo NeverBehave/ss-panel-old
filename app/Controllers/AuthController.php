@@ -120,9 +120,9 @@ class AuthController extends BaseController
             return $this->echoJson($response, $res);
         }
 
-        $created_at = strtotime( $safecode->created_at );
-        $diff = strtotime("now") - $created_at;
-        if ( $diff > 180 ){
+        $created_at = strtotime( $code->created_at );
+        $expire_at = $created_at + strtotime("+2 minutes");
+        if ( $expire_at - strtotime("now") < 0 ){
             $res['ret'] = 0;
             $res['msg'] = "安全码已经过期,请刷新重试!";
             return $this->echoJson($response, $res);
