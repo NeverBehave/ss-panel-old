@@ -13,7 +13,7 @@ use App\Utils\Check;
 use App\Utils\Hash;
 use App\Utils\Http;
 use App\Utils\Tools;
-use App\Models\Tglogin;
+use App\Models\TgLogin;
 
 
 /**
@@ -94,7 +94,7 @@ class AuthController extends BaseController
         //clean up if exist
         if ( TgLogin::where('safecode', $random)->value('safecode') == null ){
             $error = null;
-            $safecode = new Tglogin();
+            $safecode = new TgLogin();
             $safecode->code = $random;
             if ( $safecode->save() ) {
                 return $this->view()->assign('code', $safecode)->assign('error', $error)->display('auth/tglogin.tpl');
@@ -111,7 +111,7 @@ class AuthController extends BaseController
         $rememberMe = $request->getParam('remember_me');
         $safecode = $request->getParam('code');
 
-        $safecode = Tglogin::where('safecode', $safecode)->first();
+        $safecode = TgLogin::where('safecode', $safecode)->first();
 
         //start dash!!
         if ( $safecode == null ){

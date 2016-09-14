@@ -6,7 +6,7 @@ namespace App\Models;
  */
 
 
-class Tglogin extends Model
+class TgLogin extends Model
 
 {
     protected $table = "user_tglogin";
