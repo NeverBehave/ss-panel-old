@@ -11,7 +11,7 @@
         <form>
             <div class="form-group has-feedback">
                 <p>{$safecode->safecode}</p>
-                <input type="hidden" name="country" value="Norway">
+                <input id="code" type="hidden" name="code" value={$safecode->safecode}>
             </div>
         </form>
         {/if}
