@@ -89,7 +89,7 @@ class AuthController extends BaseController
 
     public function pre_tglogin($request, $response, $args){
         //Create random login request
-        $random = strtolower(Tools::genRandomChar(6));
+        $random = Tools::genRandomUpCaseChar(6);
 
         //clean up if exist
         if ( Tglogin::where('safecode', $random)->value('safecode') == null ){
