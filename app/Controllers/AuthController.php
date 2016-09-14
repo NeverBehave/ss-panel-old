@@ -13,6 +13,7 @@ use App\Utils\Check;
 use App\Utils\Hash;
 use App\Utils\Http;
 use App\Utils\Tools;
+use App\Models\Tglogin;
 
 
 /**
@@ -84,6 +85,75 @@ class AuthController extends BaseController
         $res['ret'] = 1;
         $res['msg'] = "欢迎回来";
         return $this->echoJson($response, $res);
+    }
+
+    public function pre_tglogin($request, $response, $args){
+        //Create random login request
+        $random = strtolower(Tools::genRandomChar(6));
+        $code = Tglogin::where('code', $random)->first();
+
+        //clean up if exist
+        if ( $code == null ){
+            $code = new Tglogin();
+            $code->code = $random;
+            if ( $code->save() ) {
+                return $this->view()->assign('code', $code)->display('auth/tglogin.tpl');
+            }
+        }
+            $code = null;
+            $error = "安全码生成失败,请刷新页面重试!";
+            return $this->view()->assign('error', $error)->display('auth/tglogin.tpl');
+
+    }
+
+    public function tglogin_verify($request, $response, $args){
+
+        $rememberMe = $request->getParam('remember_me');
+        $code = $request->getParam('code');
+
+        $code = Tglogin::where('code', $code)->first();
+
+        //start dash!!
+        if ( $code == null ){
+            $res['ret'] = 0;
+            $res['msg'] = "安全码发生异常!请重试!";
+            return $this->echoJson($response, $res);
+        }
+
+        $created_at = strtotime( $code->created_at );
+        $diff = strtotime("now") - $created_at;
+        if ( $diff > 180 ){
+            $res['ret'] = 0;
+            $res['msg'] = "安全码已经过期,请刷新重试!";
+            return $this->echoJson($response, $res);
+        }
+
+        if ( $code->is_verify == false ){
+            $res['ret'] = 0;
+            $res['msg'] = "您尚未验证,请前往Telegram完整登录操作";
+            return $this->echoJson($response, $res);
+        }
+
+        if ( $code->user_id == null ){
+            $res['ret'] = 0;
+            $res['msg'] = "500 服务器发生了奇怪的问题,请上报管理员";
+            return $this->echoJson($response, $res);
+        }
+
+        $time = 3600 * 24;
+        if ($rememberMe) {
+            $time = 3600 * 24 * 7;
+        }
+        Logger::info("login user $code->user_id ");
+        Auth::login($code->user_id, $time);
+
+        $code->delete();
+
+        $res['ret'] = 1;
+        $res['msg'] = "欢迎回来";
+        return $this->echoJson($response, $res);
+
+
     }
 
     public function register($request, $response, $args)
