@@ -151,10 +151,18 @@ class AuthController extends BaseController
 
         $safecode->delete();
 
+        //clean up !
+        //Actually, it should be done regular.
+        $codes = TgLogin::all;
+        foreach ($codes as $code) {
+            if ( strtotime("+180 seconds" , $code->created_at) - strtotime("now") < 0 ){
+                $code->delete();
+            }
+        }
+
         $res['ret'] = 1;
         $res['msg'] = "欢迎回来";
         return $this->echoJson($response, $res);
-
 
     }
 
