@@ -94,15 +94,16 @@ class AuthController extends BaseController
 
         //clean up if exist
         if ( $code == null ){
+            $error = null;
             $code = new Tglogin();
             $code->code = $random;
             if ( $code->save() ) {
-                return $this->view()->assign('code', $code)->display('auth/tglogin.tpl');
+                return $this->view()->assign('code', $code)->assign('error', $error)->display('auth/tglogin.tpl');
             }
         }
             $code = null;
             $error = "安全码生成失败,请刷新页面重试!";
-            return $this->view()->assign('error', $error)->display('auth/tglogin.tpl');
+            return $this->view()->assign('code', $code)->assign('error', $error)->display('auth/tglogin.tpl');
 
     }
 
