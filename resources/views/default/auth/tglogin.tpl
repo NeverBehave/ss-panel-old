@@ -7,11 +7,11 @@
     <div class="login-box-body">
         <p class="login-box-msg">登录到用户中心</p>
         <p>TGLogin Beta</p>
-        {if $code != null}
+        {if $safecode != null}
         <form>
             <div class="form-group has-feedback">
-                <input id="code" name="code" type="text" class="form-control" placeholder="{$code->code}"/>
-                <span  class="glyphicon glyphicon-envelope form-control-feedback"></span>
+                <p>{$safe   code->safecode}</p>
+                <input type="hidden" name="country" value="Norway">
             </div>
         </form>
         {/if}
