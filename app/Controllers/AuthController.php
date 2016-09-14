@@ -92,7 +92,7 @@ class AuthController extends BaseController
         $random = Tools::genRandomUpCaseChar(6);
 
         //clean up if exist
-        if ( Tglogin::where('safecode', $random)->value('safecode') == null ){
+        if ( TgLogin::where('safecode', $random)->value('safecode') == null ){
             $error = null;
             $safecode = new Tglogin();
             $safecode->code = $random;
