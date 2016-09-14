@@ -120,7 +120,7 @@ class AuthController extends BaseController
             return $this->echoJson($response, $res);
         }
 
-        $created_at = strtotime( $code->created_at );
+        $created_at = strtotime( $safecode->created_at );
         $expire_at = $created_at + strtotime("+30 seconds");  //验证后的安全码过期时间为30S
         if ( $expire_at - strtotime("now") < 0 ){
             $res['ret'] = 0;
