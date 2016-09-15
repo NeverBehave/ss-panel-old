@@ -28,10 +28,10 @@
                 {if $safecode != null}
                     <form>
                         <p>您的安全码是:<code>{$safecode->safecode}</code></p>
-                        <input id="code" type="hidden" name="code" value={$safecode->safecode} readonly>
-                        <p>请在<a href="https://telegram.me/DogespeedBot" target="view_window">@DogeSpeedbot</a>处输入下面的的命令,完成认证后点击登陆。</p>
+                        <input id="code" type="hidden" name="code" value="{$safecode->safecode}">
+                        <p>请不要刷新页面，在<a href="https://telegram.me/DogespeedBot" target="_blank">@DogeSpeedbot</a>处输入下面的的命令,完成认证后点击登陆。</p>
                         <div class="form-group has-feedback">
-                            <input id="code-command" type="text" class="form-control" value="/login {$safecode->safecode}">
+                            <input id="code-command" type="text" class="form-control" value="/login {$safecode->safecode}" readonly>
                             <span id="code-command-copy-button" class="form-control-feedback" data-clipboard-target="#code-command" data-balloon="复制到剪贴板" data-balloon-pos="up">
                                 <img width="14" src="/assets/public/img/clippy.svg">
                             </span>
