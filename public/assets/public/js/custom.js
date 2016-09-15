@@ -4,11 +4,14 @@ $(document).ready(function () {
             $(ele).addClass("sidebar-menu-current")
     });
     var time = 0;
+    $(".panel").hide();
     $(".panel").each(function (num, ele) {
         setTimeout(function () {
-            $(ele).addClass('animated bounceInUp').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function () {
-                $(ele).removeClass('animated bounceInUp');
-            });
+            $(ele).show()
+                  .addClass('animated bounceInUp')
+                  .one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function () {
+                    $(ele).removeClass('animated bounceInUp');
+                  });
         }.bind(this), time);
         time += 200;
     });

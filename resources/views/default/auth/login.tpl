@@ -5,43 +5,65 @@
         <a href="#"><b>{$config['appName']}</b></a>
     </div><!-- /.login-logo -->
     <div class="login-box-body">
-        <p class="login-box-msg">登录到用户中心</p>
-        <p>注意：使用机器人注册的用户请使用Telegram登录方式进行登录。</p>
-        <form>
-            <div class="form-group has-feedback">
-                <input id="email" name="Email" type="text" class="form-control" placeholder="邮箱"/>
-                <span  class="glyphicon glyphicon-envelope form-control-feedback"></span>
+        <ul class="nav nav-tabs nav-justified">
+            <li role="presentation" class="active"><a href="#" data-login="telegram">使用TG登陆</a></li>
+            <li role="presentation"><a href="#" data-login="account">使邮箱登陆</a></li>
+        </ul>
+        <div>
+            <div id="login-account" style="display: none">
+                <p class="login-box-msg">使用邮箱登陆登录到用户中心</p>
+                <form>
+                    <div class="form-group has-feedback">
+                        <input id="email" name="Email" type="text" class="form-control" placeholder="邮箱"/>
+                        <span  class="glyphicon glyphicon-envelope form-control-feedback"></span>
+                    </div>
+                    <div class="form-group has-feedback">
+                        <input id="passwd" name="Password" type="password" class="form-control" placeholder="密码"/>
+                        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                    </div>
+                </form>
             </div>
-            <div class="form-group has-feedback">
-                <input id="passwd" name="Password" type="password" class="form-control" placeholder="密码"/>
-                <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+            <div id="login-telegram">
+                <p class="login-box-msg">使用Telegram登录到用户中心</p>
+                {if $safecode != null}
+                    <form>
+                        <p>您的安全码是:<code>{$safecode->safecode}</code></p>
+                        <input id="code" type="hidden" name="code" value={$safecode->safecode}>
+                        <p>请在<a href="https://telegram.me/DogespeedBot" target="view_window">@DogeSpeedbot</a>处输入下面的的命令,完成认证后点击登陆。</p>
+                        <input id="code-command" type="text" class="form-control" value="/login {$safecode->safecode}">
+                        <span id="code-command-copy-button" class="form-control-feedback" data-clipboard-target="#code-command">
+                            <img width="34" src="/assets/public/img/clippy.svg" alt="复制到剪贴板">
+                        </span>
+                    </form>
+                {/if}
+                {if $error != null}
+                    <!--{$error}-->
+                {/if}
             </div>
-        </form>
-        <div class="row">
-            <div class="col-xs-8">
-                <div class="checkbox icheck">
-                    <label>
-                        <input id="remember_me" value="week" type="checkbox"> 记住我
-                    </label>
-                </div>
-            </div><!-- /.col -->
-            <div class="col-xs-4">
-                <button id="login" type="submit" class="btn btn-primary btn-block btn-flat">登录</button>
-            </div><!-- /.col -->
+            <div class="row">
+                <div class="col-xs-8">
+                    <div class="checkbox icheck">
+                        <label>
+                            <input id="remember_me" value="week" type="checkbox"> 记住我
+                        </label>
+                    </div>
+                </div><!-- /.col -->
+                <div class="col-xs-4">
+                    <button id="login" type="submit" class="btn btn-primary btn-block btn-flat">登录</button>
+                </div><!-- /.col -->
+            </div>
+            <div id="msg-success" class="alert alert-info alert-dismissable" style="display: none;">
+                <button type="button" class="close" id="ok-close" aria-hidden="true">&times;</button>
+                <h4><i class="icon fa fa-info"></i> 登录成功!</h4>
+                <p id="msg-success-p"></p>
+            </div>
+            <div id="msg-error" class="alert alert-warning alert-dismissable" style="display: none;">
+                <button type="button" class="close" id="error-close" aria-hidden="true">&times;</button>
+                <h4><i class="icon fa fa-warning"></i> 出错了!</h4>
+                <p id="msg-error-p"></p>
+            </div>
+            <a href="/password/reset">忘记密码</a>
         </div>
-        <div id="msg-success" class="alert alert-info alert-dismissable" style="display: none;">
-            <button type="button" class="close" id="ok-close" aria-hidden="true">&times;</button>
-            <h4><i class="icon fa fa-info"></i> 登录成功!</h4>
-            <p id="msg-success-p"></p>
-        </div>
-        <div id="msg-error" class="alert alert-warning alert-dismissable" style="display: none;">
-            <button type="button" class="close" id="error-close" aria-hidden="true">&times;</button>
-            <h4><i class="icon fa fa-warning"></i> 出错了!</h4>
-            <p id="msg-error-p"></p>
-        </div>
-        <a href="/password/reset">忘记密码</a><!--<br>
-        <a href="/auth/register" class="text-center">注册个帐号</a>-->
-        <a href="/auth/tglogin" class="btn btn-default">使用Telegram登录</a>
     </div><!-- /.login-box-body -->
 </div><!-- /.login-box -->
 
@@ -51,6 +73,8 @@
 <script src="/assets/public/js/bootstrap.min.js" type="text/javascript"></script>
 <!-- iCheck -->
 <script src="/assets/public/js/icheck.min.js" type="text/javascript"></script>
+<!-- clipboard -->
+<script src="/assets/public/js/clipboard.min.js" type="text/javascript"></script>
 <script>
     $(function () {
         $('input').iCheck({
@@ -65,15 +89,25 @@
 <script>
     $(document).ready(function(){
         function login(){
-            $.ajax({
-                type:"POST",
-                url:"/auth/login",
-                dataType:"json",
-                data:{
+            if($(".active a").data("login") === "telegram"){
+                $url = "/auth/tglogin";
+                $data = {
+                    code: $("#code").val(),
+                    remember_me: $("#remember_me").val()
+                };
+            }else{
+                $url = "/auth/login";
+                $data = {
                     email: $("#email").val(),
                     passwd: $("#passwd").val(),
                     remember_me: $("#remember_me").val()
-                },
+                };
+            }
+            $.ajax({
+                type:"POST",
+                url:$url,
+                dataType:"json",
+                data:$data,
                 success:function(data){
                     if(data.ret == 1){
                         $("#msg-error").hide(10);
@@ -87,8 +121,8 @@
                     }
                 },
                 error:function(jqXHR){
-                    $("#msg-error").hide(10);
-                    $("#msg-error").show(100);
+                    $("#msg-error").hide(10)
+                                   .show(100);
                     $("#msg-error-p").html("发生错误："+jqXHR.status);
                 }
             });
@@ -107,6 +141,15 @@
         $("#error-close").click(function(){
             $("#msg-error").hide(100);
         });
+        $(".nav a").click(function () {
+            $(".nav li").removeClass("active");
+            $(this).closest("li").addClass("active");
+            $("#login-telegram, #login-account").hide();
+            $("#login-"+this.dataset.login).show();
+            return false;
+        });
+        var spans = document.querySelectorAll('#code-command-copy-button');
+        var clipboard = new Clipboard(spans);
     })
 </script>
 <div style="display:none;">

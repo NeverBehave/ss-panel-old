@@ -31,8 +31,16 @@ code {
 	color: #fff;
 }
 
-.login-box-body, .register-box-body {
+.register-box-body {
 	border-radius: 5px;
+}
+
+.login-box-body {
+	padding: 0;
+}
+
+.login-box-body > div{
+	padding: 20px;
 }
 
 .navbar {
