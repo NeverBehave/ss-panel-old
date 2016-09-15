@@ -43,6 +43,11 @@ code {
 	padding: 20px;
 }
 
+#code-command-copy-button {
+	pointer-events: auto;
+	cursor: pointer;
+}
+
 .navbar {
 	background-color: #283593 !important;
 	height: 53px !important;

@@ -11,6 +11,7 @@
     <!-- Theme style -->
     <link href="/assets/public/css/AdminLTE.min.css" rel="stylesheet" type="text/css" />
     <link href="/assets/public/css/blue.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/public/css/balloon.min.css" rel="stylesheet" type="text/css" />
     <link href="/assets/public/css/ssworld.css" rel="stylesheet" type="text/css" />
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->

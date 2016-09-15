@@ -28,12 +28,14 @@
                 {if $safecode != null}
                     <form>
                         <p>您的安全码是:<code>{$safecode->safecode}</code></p>
-                        <input id="code" type="hidden" name="code" value={$safecode->safecode}>
+                        <input id="code" type="hidden" name="code" value={$safecode->safecode} readonly>
                         <p>请在<a href="https://telegram.me/DogespeedBot" target="view_window">@DogeSpeedbot</a>处输入下面的的命令,完成认证后点击登陆。</p>
-                        <input id="code-command" type="text" class="form-control" value="/login {$safecode->safecode}">
-                        <span id="code-command-copy-button" class="form-control-feedback" data-clipboard-target="#code-command">
-                            <img width="34" src="/assets/public/img/clippy.svg" alt="复制到剪贴板">
-                        </span>
+                        <div class="form-group has-feedback">
+                            <input id="code-command" type="text" class="form-control" value="/login {$safecode->safecode}">
+                            <span id="code-command-copy-button" class="form-control-feedback" data-clipboard-target="#code-command" data-balloon="复制到剪贴板" data-balloon-pos="up">
+                                <img width="14" src="/assets/public/img/clippy.svg">
+                            </span>
+                        </div>
                     </form>
                 {/if}
                 {if $error != null}
@@ -148,8 +150,14 @@
             $(".login-"+this.dataset.login).show();
             return false;
         });
-        var spans = document.querySelectorAll('#code-command-copy-button');
+        var spans = document.querySelector('#code-command-copy-button');
         var clipboard = new Clipboard(spans);
+        clipboard.on('success', function(e) {
+            e.trigger.dataset.balloon = "复制成功";
+        });
+        clipboard.on('error', function(e) {
+            e.trigger.dataset.balloon = "复制失败";
+        });
     })
 </script>
 <div style="display:none;">
