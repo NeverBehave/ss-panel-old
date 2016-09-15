@@ -39,7 +39,22 @@ class AuthController extends BaseController
 
     public function login($request, $response, $args)
     {
-        return $this->view()->display('auth/login.tpl');
+        //Create random login request
+        $random = Tools::genRandomUpCaseChar(6);
+
+        //clean up if exist
+        if ( TgLogin::where('safecode', $random)->value('safecode') == null ){
+            $error = null;
+            $safecode = new TgLogin();
+            $safecode->safecode = $random;
+            $safecode->created_at = strtotime("now");
+            if ( $safecode->save() ) {
+                return $this->view()->assign('safecode', $safecode)->assign('error', $error)->display('auth/login.tpl');
+            }
+        }
+        $code = null;
+        $error = "安全码生成失败,请刷新页面重试!";
+        return $this->view()->assign('safecode', $safecode)->assign('error', $error)->display('auth/login.tpl');
     }
 
     public function loginHandle($request, $response, $args)

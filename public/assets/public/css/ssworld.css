@@ -35,12 +35,17 @@ code {
 	border-radius: 5px;
 }
 
-.login-box-body {
+.no-padding {
 	padding: 0;
 }
 
-.login-box-body > div{
+.login-box-main{
 	padding: 20px;
+}
+
+#code-command-copy-button {
+	pointer-events: auto;
+	cursor: pointer;
 }
 
 .navbar {
