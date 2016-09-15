@@ -4,13 +4,13 @@
     <div class="login-logo">
         <a href="#"><b>{$config['appName']}</b></a>
     </div><!-- /.login-logo -->
-    <div class="login-box-body">
+    <div class="login-box-body no-padding">
         <ul class="nav nav-tabs nav-justified">
             <li role="presentation" class="active"><a href="#" data-login="telegram">使用TG登陆</a></li>
             <li role="presentation"><a href="#" data-login="account">使邮箱登陆</a></li>
         </ul>
-        <div>
-            <div id="login-account" style="display: none">
+        <div class="login-box-main">
+            <div class="login-account" style="display: none">
                 <p class="login-box-msg">使用邮箱登陆登录到用户中心</p>
                 <form>
                     <div class="form-group has-feedback">
@@ -23,7 +23,7 @@
                     </div>
                 </form>
             </div>
-            <div id="login-telegram">
+            <div class="login-telegram">
                 <p class="login-box-msg">使用Telegram登录到用户中心</p>
                 {if $safecode != null}
                     <form>
@@ -62,7 +62,7 @@
                 <h4><i class="icon fa fa-warning"></i> 出错了!</h4>
                 <p id="msg-error-p"></p>
             </div>
-            <a href="/password/reset">忘记密码</a>
+            <a class="login-account" style="display: none" href="/password/reset">忘记密码</a>
         </div>
     </div><!-- /.login-box-body -->
 </div><!-- /.login-box -->
@@ -144,8 +144,8 @@
         $(".nav a").click(function () {
             $(".nav li").removeClass("active");
             $(this).closest("li").addClass("active");
-            $("#login-telegram, #login-account").hide();
-            $("#login-"+this.dataset.login).show();
+            $(".login-telegram, .login-account").hide();
+            $(".login-"+this.dataset.login).show();
             return false;
         });
         var spans = document.querySelectorAll('#code-command-copy-button');
