@@ -31,8 +31,21 @@ code {
 	color: #fff;
 }
 
-.login-box-body, .register-box-body {
+.register-box-body {
 	border-radius: 5px;
+}
+
+.no-padding {
+	padding: 0;
+}
+
+.login-box-main{
+	padding: 20px;
+}
+
+#code-command-copy-button {
+	pointer-events: auto;
+	cursor: pointer;
 }
 
 .navbar {
