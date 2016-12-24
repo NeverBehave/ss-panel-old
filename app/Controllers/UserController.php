@@ -47,9 +47,9 @@ class UserController extends BaseController
     {
         $msg = DbConfig::get('user-node');
         $user = Auth::getUser();
-        $nodes = Node::whereRaw('type = 1 or type = 3')->orderBy('sort')->get();
+        $nodes = Node::where('type', '<=', 2)->orderBy('sort')->get();
         if ($user->ac_enable) {
-            $acnodes = Node::whereRaw('type = 2 or type = 3')->orderBy('sort')->get();
+            $acnodes = Node::where('type', '>', 1)->orderBy('sort')->get();
             return $this->view()->assign('nodes', $nodes)->assign('acnodes', $acnodes)->assign('user', $user)->assign('msg', $msg)->display('user/node.tpl');
         }
         return $this->view()->assign('nodes', $nodes)->assign('user', $user)->assign('msg', $msg)->display('user/node.tpl');
