@@ -75,7 +75,7 @@
                                                         class="pull-right badge bg-aqua">{$node->getOnlineUserCount()}</span></a>
                                         </li>
                                         <li><a href="./node/{$node->id}">产生流量 <span
-                                                        class="pull-right badge bg-green">{$node->getTrafficFromLogs()}</span></a>
+                                                        class="pull-right badge bg-green">算不出来QAQ，点进去看</span></a>
                                         </li>
                                         <li><a href="./node/{$node->id}">Uptime: <span
                                                         class="pull-right badge bg-green">{$node->getNodeUptime()}</span></a>
